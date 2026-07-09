@@ -1041,8 +1041,35 @@
       display: grid;
       grid-template-columns: repeat(10, 1fr);
       gap: 6px;
-      margin-bottom: 14px;
+      margin-bottom: 0;
     }
+
+    .day-tracker-more {
+      max-height: 0;
+      overflow: hidden;
+      margin-bottom: 0;
+      transition: max-height 0.35s cubic-bezier(.4,0,.2,1);
+    }
+    .day-tracker-more.open { max-height: 1000px; margin-bottom: 14px; }
+
+    .day-tracker-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      width: 100%;
+      background: none;
+      border: none;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--primary);
+      padding: 10px 0;
+      margin-bottom: 4px;
+      cursor: pointer;
+    }
+    .day-tracker-toggle .cat-chevron { transition: transform 0.25s cubic-bezier(.4,0,.2,1); }
+    .day-tracker-toggle.open .cat-chevron { transform: rotate(180deg); }
 
     .day-cell {
       aspect-ratio: 1;
@@ -2222,17 +2249,44 @@
     trackHead.textContent = 'Day by day';
     con.appendChild(trackHead);
 
-    const grid = document.createElement('div');
-    grid.className = 'day-tracker-grid';
-    for (let d = 1; d <= 100; d++) {
+    function makeDayCell(d) {
       const status = dayStatus(d);
       const cell = document.createElement('div');
       cell.className = 'day-cell ' + status;
       cell.textContent = d;
       cell.title = `Day ${d}: ${status}`;
-      grid.appendChild(cell);
+      return cell;
     }
+
+    const visibleRows  = Math.max(2, Math.ceil(S.day / 10));
+    const visibleCount = Math.min(100, visibleRows * 10);
+
+    const grid = document.createElement('div');
+    grid.className = 'day-tracker-grid';
+    for (let d = 1; d <= visibleCount; d++) grid.appendChild(makeDayCell(d));
     con.appendChild(grid);
+
+    if (visibleCount < 100) {
+      const moreGrid = document.createElement('div');
+      moreGrid.className = 'day-tracker-grid day-tracker-more';
+      for (let d = visibleCount + 1; d <= 100; d++) moreGrid.appendChild(makeDayCell(d));
+
+      const toggle = document.createElement('button');
+      toggle.className = 'day-tracker-toggle';
+      toggle.innerHTML = `<span>Show all 100 days</span>
+        <svg class="cat-chevron" width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <path d="M4 6l4 4 4-4" stroke="rgba(60,60,67,0.48)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>`;
+      toggle.onclick = function() {
+        const isOpen = moreGrid.classList.toggle('open');
+        this.classList.toggle('open', isOpen);
+        this.querySelector('span').textContent = isOpen ? 'Show fewer days' : 'Show all 100 days';
+      };
+      con.appendChild(toggle);
+      con.appendChild(moreGrid);
+    } else {
+      grid.style.marginBottom = '14px';
+    }
 
     const legend = document.createElement('div');
     legend.className = 'tracker-legend';
