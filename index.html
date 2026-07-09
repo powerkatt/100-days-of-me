@@ -1,0 +1,2123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>100 Days of Me</title>
+  <style>
+    /* ═══════════════════════════════════════
+       iOS DESIGN SYSTEM — VIBRANT PASTELS
+    ═══════════════════════════════════════ */
+    :root {
+      /* iOS system backgrounds */
+      --bg:         #F2F2F7;
+      --card:       #FFFFFF;
+      --card-2:     #F9F9FB;
+
+      /* iOS labels */
+      --label:      #000000;
+      --label-2:    rgba(60,60,67,0.72);
+      --label-3:    rgba(60,60,67,0.48);
+      --separator:  rgba(60,60,67,0.18);
+
+      /* Primary (vibrant coral) */
+      --primary:    #FF6B51;
+      --primary-dk: #E85A40;
+
+      /* Vibrant pastel swatches (bright, not muted) */
+      --mint:       #30D158;   --mint-bg:   #D0FFE1;
+      --lav:        #BF5AF2;   --lav-bg:    #EDD6FF;
+      --yel:        #FFD60A;   --yel-bg:    #FFF5C0;
+      --coral:      #FF6B51;   --coral-bg:  #FFD8D0;
+      --sky:        #32ADE6;   --sky-bg:    #CBF0FF;
+      --rose:       #FF375F;   --rose-bg:   #FFD4DE;
+      --orange:     #FF9F0A;   --orange-bg: #FFE9C0;
+      --purple:     #5856D6;   --purple-bg: #D6D5FF;
+
+      /* Semantic */
+      --happy:      #30D158;
+      --happy-bg:   #D0FFE1;
+      --happy-dk:   #1A8C38;
+      --sad:        #FF3B30;
+      --sad-bg:     #FFD0CE;
+      --sad-dk:     #C42020;
+
+      /* Shapes */
+      --r-xs:   8px;
+      --r-sm:   12px;
+      --r-md:   16px;
+      --r-lg:   20px;
+      --r-xl:   26px;
+      --r-pill: 100px;
+
+      /* Shadows */
+      --sh-xs: 0 1px 3px rgba(0,0,0,0.07), 0 1px 2px rgba(0,0,0,0.05);
+      --sh-sm: 0 2px 8px rgba(0,0,0,0.08), 0 1px 3px rgba(0,0,0,0.05);
+      --sh-md: 0 4px 16px rgba(0,0,0,0.09), 0 2px 6px rgba(0,0,0,0.05);
+    }
+
+    /* ═══════════════════════════════════════
+       RESET + BASE
+    ═══════════════════════════════════════ */
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+    html, body {
+      height: 100%;
+      background: #D1D1D6;
+      display: flex;
+      justify-content: center;
+      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', system-ui, sans-serif;
+      color: var(--label);
+    }
+
+    .app {
+      width: 100%;
+      max-width: 390px;
+      min-height: 100vh;
+      background: var(--bg);
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* ═══════════════════════════════════════
+       SCREENS
+    ═══════════════════════════════════════ */
+    .screen {
+      display: none;
+      flex-direction: column;
+      min-height: 100vh;
+      padding-bottom: 100px;
+      animation: fadeUp 0.28s cubic-bezier(.4,0,.2,1);
+    }
+    .screen.active { display: flex; }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ═══════════════════════════════════════
+       TOP NAV BAR (iOS style)
+    ═══════════════════════════════════════ */
+    .top-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 56px 20px 0;
+    }
+
+    /* Pill chip — day indicator */
+    .day-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      height: 30px;
+      padding: 0 12px;
+      border-radius: var(--r-pill);
+      background: var(--card);
+      box-shadow: var(--sh-xs);
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--label-2);
+    }
+
+    .day-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--primary);
+      flex-shrink: 0;
+    }
+
+    /* Icon button */
+    .nav-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--card);
+      box-shadow: var(--sh-xs);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    /* ═══════════════════════════════════════
+       HEADER
+    ═══════════════════════════════════════ */
+    .header {
+      padding: 14px 22px 20px;
+    }
+
+    .header-label {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      color: var(--primary);
+      margin-bottom: 6px;
+    }
+
+    h1 {
+      font-size: 32px;
+      font-weight: 700;
+      line-height: 1.15;
+      letter-spacing: -0.5px;
+      color: var(--label);
+      margin-bottom: 8px;
+    }
+
+    .header p {
+      font-size: 15px;
+      font-weight: 400;
+      color: var(--label-2);
+      line-height: 1.5;
+    }
+
+    /* ═══════════════════════════════════════
+       CONTENT
+    ═══════════════════════════════════════ */
+    .content {
+      padding: 0 16px;
+      flex: 1;
+    }
+
+    .section-label {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.6px;
+      text-transform: uppercase;
+      color: var(--label-2);
+      margin: 16px 0 10px;
+    }
+
+    /* ═══════════════════════════════════════
+       SLOT CARDS — Morning inputs
+    ═══════════════════════════════════════ */
+    .slot-card {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      background: var(--card);
+      border-radius: var(--r-md);
+      padding: 14px 16px;
+      margin-bottom: 10px;
+      box-shadow: var(--sh-xs);
+      border: 1.5px solid transparent;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .slot-card:focus-within {
+      border-color: var(--primary);
+      box-shadow: var(--sh-sm);
+    }
+
+    .slot-num {
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--primary);
+      min-width: 20px;
+      padding-top: 3px;
+      opacity: 0.8;
+    }
+
+    .slot-input {
+      flex: 1;
+      border: none;
+      background: transparent;
+      font-family: inherit;
+      font-size: 15px;
+      font-weight: 400;
+      color: var(--label);
+      line-height: 1.5;
+      resize: none;
+      outline: none;
+    }
+    .slot-input::placeholder { color: var(--label-3); }
+
+    /* ═══════════════════════════════════════
+       CHIPS — Bright pastel suggestion pills
+    ═══════════════════════════════════════ */
+    .chips-wrap {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      height: 32px;
+      padding: 0 13px;
+      border-radius: var(--r-pill);
+      border: none;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.12s, opacity 0.12s;
+      box-shadow: var(--sh-xs);
+    }
+    .chip:active { transform: scale(0.96); }
+    .chip.used   { opacity: 0.35; }
+
+    /* Vibrant pastel chip colors */
+    .chip-sage        { background: var(--mint-bg);   color: var(--happy-dk); }
+    .chip-lav         { background: var(--lav-bg);    color: #6A00BF; }
+    .chip-yel         { background: var(--yel-bg);    color: #7A5C00; }
+    .chip-coral       { background: var(--coral-bg);  color: #B83A22; }
+    .chip-blue        { background: var(--sky-bg);    color: #0055A0; }
+    .chip-pink        { background: var(--rose-bg);   color: #B3002A; }
+    .chip-carryover   { background: var(--lav-bg);    color: #6A00BF; border: 1.5px solid var(--lav); font-weight: 700; }
+
+    /* ═══════════════════════════════════════
+       BUTTONS
+    ═══════════════════════════════════════ */
+
+    /* Primary CTA — filled coral pill */
+    .btn-cta {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 56px;
+      border-radius: var(--r-pill);
+      background: var(--primary);
+      color: #FFFFFF;
+      font-family: inherit;
+      font-size: 17px;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      transition: transform 0.12s, background 0.15s;
+      margin: 14px 0 8px;
+      box-shadow: 0 4px 16px rgba(255,107,81,0.35);
+    }
+    .btn-cta:active {
+      background: var(--primary-dk);
+      transform: scale(0.98);
+    }
+
+    /* Ghost button */
+    .btn-ghost {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 46px;
+      border-radius: var(--r-pill);
+      background: transparent;
+      color: var(--label-2);
+      font-family: inherit;
+      font-size: 15px;
+      font-weight: 500;
+      border: 1.5px solid var(--separator);
+      cursor: pointer;
+      transition: all 0.15s;
+      margin: 4px 0;
+    }
+    .btn-ghost:active { background: var(--card); }
+
+    /* Demo links */
+    .demo-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: center;
+      padding: 10px 0 20px;
+    }
+    .demo-links button {
+      background: var(--card);
+      border: none;
+      border-radius: var(--r-pill);
+      font-family: inherit;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--label-2);
+      padding: 7px 14px;
+      cursor: pointer;
+      box-shadow: var(--sh-xs);
+      transition: all 0.12s;
+    }
+    .demo-links button:active { transform: scale(0.95); }
+    .demo-links button:last-child { color: var(--sad); }
+
+    /* ═══════════════════════════════════════
+       EVENING CARDS
+    ═══════════════════════════════════════ */
+    .eve-card {
+      background: var(--card);
+      border-radius: var(--r-xl);
+      box-shadow: var(--sh-sm);
+      padding: 18px 18px 16px;
+      margin-bottom: 12px;
+    }
+
+    .eve-item-name {
+      font-size: 17px;
+      font-weight: 600;
+      color: var(--label);
+      margin-bottom: 16px;
+      line-height: 1.3;
+    }
+
+    .toggle-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.6px;
+      text-transform: uppercase;
+      color: var(--label-3);
+      margin-bottom: 7px;
+    }
+
+    /* iOS-style segmented control */
+    .toggle-row {
+      background: rgba(118,118,128,0.12);
+      border-radius: 10px;
+      padding: 2px;
+      display: flex;
+      margin-bottom: 14px;
+    }
+
+    .tgl {
+      flex: 1;
+      height: 34px;
+      border: none;
+      border-radius: 8px;
+      background: transparent;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--label);
+      cursor: pointer;
+      transition: all 0.18s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+    }
+
+    .tgl.on-done {
+      background: var(--mint-bg);
+      color: var(--happy-dk);
+      box-shadow: var(--sh-xs);
+    }
+    .tgl.on-skip {
+      background: var(--card);
+      color: var(--label-2);
+      box-shadow: var(--sh-xs);
+    }
+    .tgl.on-happy {
+      background: var(--mint-bg);
+      color: var(--happy-dk);
+      box-shadow: var(--sh-xs);
+    }
+    .tgl.on-sad {
+      background: var(--sad-bg);
+      color: var(--sad-dk);
+      box-shadow: var(--sh-xs);
+    }
+
+    /* Feel expand */
+    .feel-expand {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s cubic-bezier(.4,0,.2,1);
+    }
+    .feel-expand.open { max-height: 3000px; }
+
+    /* iOS-style text field */
+    .feel-textarea {
+      width: 100%;
+      min-height: 80px;
+      padding: 12px 14px;
+      border-radius: var(--r-sm);
+      border: 1.5px solid var(--separator);
+      background: var(--bg);
+      font-family: inherit;
+      font-size: 15px;
+      color: var(--label);
+      resize: none;
+      outline: none;
+      transition: border-color 0.18s;
+      margin-top: 6px;
+      line-height: 1.5;
+    }
+    .feel-textarea:focus { border-color: var(--primary); border-width: 2px; }
+    .feel-textarea::placeholder { color: var(--label-3); }
+
+    /* ═══════════════════════════════════════
+       COMPLETE SCREEN
+    ═══════════════════════════════════════ */
+    .complete-top {
+      background: linear-gradient(160deg, var(--coral-bg) 0%, var(--lav-bg) 100%);
+      padding: 54px 24px 32px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .ring-wrap {
+      position: relative;
+      width: 140px;
+      height: 140px;
+      margin-bottom: 20px;
+    }
+
+    #ring-svg { position: absolute; top: 0; left: 0; }
+
+    .ring-center {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .ring-pct {
+      font-size: 30px;
+      font-weight: 800;
+      color: var(--label);
+      letter-spacing: -0.5px;
+    }
+
+    .ring-sub {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--label-2);
+    }
+
+    .complete-day-badge {
+      display: inline-flex;
+      align-items: center;
+      height: 28px;
+      padding: 0 14px;
+      border-radius: var(--r-pill);
+      background: var(--primary);
+      color: #FFFFFF;
+      font-size: 12px;
+      font-weight: 700;
+      margin-bottom: 12px;
+      box-shadow: 0 2px 12px rgba(255,107,81,0.35);
+    }
+
+    .complete-title {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--label);
+      margin-bottom: 6px;
+      letter-spacing: -0.3px;
+    }
+
+    .complete-sub {
+      font-size: 15px;
+      font-weight: 400;
+      color: var(--label-2);
+    }
+
+    /* Stats row — colorful iOS tonal cards */
+    .stat-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
+      padding: 16px;
+    }
+
+    .stat-pill {
+      border-radius: var(--r-lg);
+      padding: 16px 8px;
+      text-align: center;
+      box-shadow: var(--sh-xs);
+    }
+    .stat-pill:nth-child(1) { background: var(--lav-bg); }
+    .stat-pill:nth-child(2) { background: var(--mint-bg); }
+    .stat-pill:nth-child(3) { background: var(--yel-bg); }
+
+    .stat-num {
+      font-size: 30px;
+      font-weight: 800;
+      color: var(--label);
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+    .stat-pill:nth-child(2) .stat-num { color: var(--happy-dk); }
+
+    .stat-lbl {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--label-2);
+      letter-spacing: 0.3px;
+      line-height: 1.3;
+    }
+
+    /* Recap list */
+    .recap-card {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      background: var(--card);
+      border-radius: var(--r-md);
+      padding: 14px 16px;
+      margin-bottom: 8px;
+      box-shadow: var(--sh-xs);
+    }
+
+    .recap-icon {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 800;
+      flex-shrink: 0;
+    }
+    .recap-icon.done { background: var(--mint-bg); color: var(--happy-dk); }
+    .recap-icon.skip { background: var(--card-2);  color: var(--label-2); border: 1px solid var(--separator); }
+
+    .recap-name {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--label);
+      margin-bottom: 2px;
+    }
+
+    .recap-feel {
+      font-size: 13px;
+      color: var(--label-2);
+      font-style: italic;
+      line-height: 1.4;
+      margin-bottom: 4px;
+    }
+
+    .recap-tag {
+      display: inline-flex;
+      align-items: center;
+      height: 20px;
+      padding: 0 8px;
+      border-radius: var(--r-pill);
+      font-size: 11px;
+      font-weight: 700;
+    }
+    .tag-happy     { background: var(--mint-bg);   color: var(--happy-dk); }
+    .tag-carryover { background: var(--lav-bg);    color: #6A00BF; }
+
+    /* ═══════════════════════════════════════
+       WEEKLY + DASHBOARD SHARED
+    ═══════════════════════════════════════ */
+
+    /* Insight box */
+    .insight-box {
+      background: linear-gradient(135deg, var(--sky-bg), var(--lav-bg));
+      border-radius: var(--r-xl);
+      padding: 18px;
+      margin-bottom: 14px;
+      box-shadow: var(--sh-xs);
+    }
+
+    .insight-box-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      color: var(--label-2);
+      margin-bottom: 5px;
+    }
+
+    .insight-box-text {
+      font-size: 15px;
+      color: var(--label);
+      line-height: 1.55;
+    }
+
+    .section-head { margin: 18px 0 10px; }
+
+    /* Section tag pills */
+    .pill-tag {
+      display: inline-flex;
+      align-items: center;
+      height: 30px;
+      padding: 0 12px;
+      border-radius: var(--r-pill);
+      font-size: 13px;
+      font-weight: 700;
+    }
+    .pill-happy   { background: var(--mint-bg);  color: var(--happy-dk); }
+    .pill-unhappy { background: var(--sad-bg);   color: var(--sad-dk); }
+    .pill-insight { background: var(--sky-bg);   color: #00527A; }
+
+    /* Pie chart card */
+    .pie-wrap {
+      background: var(--card);
+      border-radius: var(--r-xl);
+      box-shadow: var(--sh-sm);
+      padding: 20px;
+      margin-bottom: 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .pie-legend {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .pie-legend-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .pie-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .pie-legend-label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--label);
+      flex: 1;
+    }
+
+    .pie-legend-bar-track {
+      width: 80px;
+      height: 6px;
+      background: var(--separator);
+      border-radius: var(--r-pill);
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+
+    .pie-legend-bar-fill {
+      height: 100%;
+      border-radius: var(--r-pill);
+      transition: width 0.8s cubic-bezier(.4,0,.2,1);
+    }
+
+    .pie-legend-count {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--label-2);
+      width: 20px;
+      text-align: right;
+      flex-shrink: 0;
+    }
+
+    /* Show all */
+    .show-all-wrap { text-align: right; margin-bottom: 6px; }
+    .show-all-btn {
+      background: none;
+      border: none;
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--primary);
+      cursor: pointer;
+      padding: 4px 8px;
+      border-radius: var(--r-xs);
+    }
+
+    /* Category sections */
+    .weekly-cats { display: flex; flex-direction: column; gap: 8px; }
+
+    .cat-section {
+      background: var(--card);
+      border-radius: var(--r-xl);
+      box-shadow: var(--sh-xs);
+      overflow: hidden;
+    }
+
+    .cat-toggle {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 13px 16px;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      font-family: inherit;
+      transition: background 0.15s;
+    }
+    .cat-toggle:active { background: var(--card-2); }
+
+    .cat-toggle-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .cat-toggle-count {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--label-2);
+      background: var(--bg);
+      padding: 2px 8px;
+      border-radius: var(--r-pill);
+    }
+
+    .cat-chevron { transition: transform 0.25s cubic-bezier(.4,0,.2,1); }
+    .cat-toggle.open .cat-chevron { transform: rotate(180deg); }
+
+    .cat-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.35s cubic-bezier(.4,0,.2,1);
+    }
+    .cat-content.open { max-height: 3000px; }
+
+    .cat-content-inner {
+      padding: 4px 12px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    /* Category pills — vibrant pastels */
+    .cat-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      height: 28px;
+      padding: 0 10px;
+      border-radius: var(--r-pill);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .cat-physical     { background: var(--mint-bg);   color: var(--happy-dk); }
+    .cat-inner        { background: var(--lav-bg);    color: #6A00BF; }
+    .cat-intellectual { background: var(--sky-bg);    color: #0055A0; }
+    .cat-connection   { background: var(--yel-bg);    color: #7A5C00; }
+    .cat-rest         { background: var(--rose-bg);   color: #B3002A; }
+    .cat-discovery    { background: var(--coral-bg);  color: #B83A22; }
+    .cat-creative     { background: var(--purple-bg); color: #2C2AAF; }
+    .cat-selfcare     { background: var(--orange-bg); color: #8C5200; }
+    .cat-other        { background: #E8E8ED;           color: var(--label-2); }
+
+    /* Activity group cards */
+    .group-card {
+      background: var(--bg);
+      border-radius: var(--r-md);
+      padding: 12px 14px;
+    }
+
+    .group-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+
+    .group-name {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--label);
+    }
+
+    .group-count {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: var(--r-pill);
+    }
+    .group-count.happy   { background: var(--mint-bg);  color: var(--happy-dk); }
+    .group-count.unhappy { background: var(--sad-bg);   color: var(--sad-dk); }
+
+    .group-days {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 8px;
+    }
+
+    .day-chip-sm {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: var(--r-pill);
+      background: var(--card);
+      color: var(--label-2);
+      box-shadow: var(--sh-xs);
+    }
+
+    .group-notes { display: flex; flex-direction: column; gap: 6px; margin-top: 4px; }
+
+    .group-note {
+      background: var(--card);
+      border-left: 3px solid var(--primary);
+      padding: 8px 10px;
+      border-radius: 0 var(--r-xs) var(--r-xs) 0;
+      box-shadow: var(--sh-xs);
+    }
+
+    .group-note-text {
+      font-size: 13px;
+      font-style: italic;
+      color: var(--label);
+      line-height: 1.45;
+      margin-bottom: 2px;
+    }
+
+    .group-note-day {
+      font-size: 11px;
+      color: var(--label-3);
+    }
+
+    .no-notes {
+      font-size: 14px;
+      color: var(--label-2);
+      font-style: italic;
+      padding: 4px 0;
+    }
+
+    /* ═══════════════════════════════════════
+       DASHBOARD
+    ═══════════════════════════════════════ */
+    .compare-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .compare-half {
+      background: var(--card);
+      border-radius: var(--r-xl);
+      padding: 20px 14px;
+      text-align: center;
+      box-shadow: var(--sh-sm);
+    }
+    .compare-half:first-child { background: linear-gradient(150deg, var(--mint-bg), var(--sky-bg)); }
+    .compare-half:last-child  { background: linear-gradient(150deg, var(--rose-bg), var(--coral-bg)); }
+
+    .ch-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    .ch-label.happy { color: var(--happy-dk); }
+    .ch-label.sad   { color: var(--sad-dk); }
+
+    .ch-num {
+      font-size: 52px;
+      font-weight: 800;
+      line-height: 1;
+      margin-bottom: 4px;
+      letter-spacing: -1px;
+    }
+    .ch-num.happy { color: var(--happy-dk); }
+    .ch-num.sad   { color: var(--sad-dk); }
+
+    .ch-sub {
+      font-size: 12px;
+      color: var(--label-2);
+    }
+
+    .bubble-wrap {
+      background: var(--card);
+      border-radius: var(--r-xl);
+      overflow: hidden;
+      box-shadow: var(--sh-sm);
+      margin-bottom: 12px;
+    }
+
+    .bar-item { margin-bottom: 12px; }
+    .bar-row  { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 4px; }
+    .bar-lbl  { font-size: 13px; font-weight: 600; color: var(--label); }
+    .bar-cnt  { font-size: 12px; color: var(--label-2); font-weight: 700; }
+    .bar-track { height: 8px; background: var(--separator); border-radius: var(--r-pill); overflow: hidden; }
+    .bar-fill  { height: 100%; border-radius: var(--r-pill); transition: width 0.8s cubic-bezier(.4,0,.2,1); }
+    .bar-gray  { background: var(--sad-bg); }
+
+    .q-card {
+      background: var(--card);
+      border-radius: var(--r-xl);
+      padding: 16px;
+      margin-bottom: 8px;
+      box-shadow: var(--sh-xs);
+    }
+    .q-card.happy   { border-top: 4px solid var(--mint); }
+    .q-card.unhappy { border-top: 4px solid var(--rose); }
+
+    .q-name {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--label-2);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 6px;
+    }
+
+    .q-text {
+      font-size: 15px;
+      font-weight: 400;
+      color: var(--label);
+      font-style: italic;
+      line-height: 1.5;
+      margin-bottom: 6px;
+    }
+
+    .q-day {
+      font-size: 12px;
+      color: var(--label-2);
+    }
+
+    /* ═══════════════════════════════════════
+       iOS TAB BAR
+    ═══════════════════════════════════════ */
+    .tab-bar {
+      position: fixed;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+      max-width: 390px;
+      height: 80px;
+      background: rgba(255,255,255,0.88);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-top: 0.5px solid var(--separator);
+      display: flex;
+      align-items: flex-start;
+      padding: 10px 0 0;
+      z-index: 100;
+    }
+
+    .tab {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-family: inherit;
+      padding: 0 4px;
+    }
+
+    .tab svg {
+      stroke: var(--label-3);
+      transition: stroke 0.18s;
+    }
+    .tab.active svg { stroke: var(--primary); }
+
+    .tab-lbl {
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--label-3);
+      letter-spacing: 0.2px;
+      transition: color 0.18s;
+    }
+    .tab.active .tab-lbl {
+      color: var(--primary);
+      font-weight: 700;
+    }
+
+    /* Footer padding on weekly/dashboard */
+    .weekly-footer, .dash-footer {
+      padding: 0 16px 8px;
+    }
+  </style>
+</head>
+<body>
+<div class="app">
+
+  <!-- ═══════════════════════════════
+       SCREEN 1: MORNING
+  ═══════════════════════════════ -->
+  <div class="screen active" id="screen-morning">
+    <div class="top-nav">
+      <div class="day-pill">
+        <span class="day-dot"></span>
+        Day <span id="morning-day-num">1</span> of 100
+      </div>
+      <div class="nav-icon">
+        <svg width="17" height="17" viewBox="0 0 17 17" fill="none">
+          <circle cx="8.5" cy="5.5" r="2.2" stroke="var(--label-2)" stroke-width="1.5"/>
+          <path d="M2.5 14c0-2.8 2.69-4.5 6-4.5s6 1.7 6 4.5" stroke="var(--label-2)" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+      </div>
+    </div>
+
+    <div class="header">
+      <div class="header-label">Good morning</div>
+      <h1>What will make<br>you happy today?</h1>
+      <p>Pick 3 things. Big or small — it counts.</p>
+    </div>
+
+    <div class="content">
+      <div class="section-label">Today's intentions</div>
+
+      <div class="slot-card">
+        <div class="slot-num">01</div>
+        <textarea class="slot-input" id="slot-1" placeholder="Something that lights you up…" rows="2"></textarea>
+      </div>
+      <div class="slot-card">
+        <div class="slot-num">02</div>
+        <textarea class="slot-input" id="slot-2" placeholder="Even something small…" rows="2"></textarea>
+      </div>
+      <div class="slot-card">
+        <div class="slot-num">03</div>
+        <textarea class="slot-input" id="slot-3" placeholder="What would you regret not doing?" rows="2"></textarea>
+      </div>
+
+      <div class="section-label" style="margin-top:20px">Need a spark?</div>
+      <div class="chips-wrap" id="chips-wrap"></div>
+
+      <button class="btn-cta" onclick="startDay()">Begin my day →</button>
+
+      <div class="demo-links">
+        <button onclick="goToEvening()">⚡ Skip to evening</button>
+        <button onclick="demoJumpWeekly()">📋 Week 1 summary</button>
+        <button onclick="demoJumpDashboard()">📊 10-day dashboard</button>
+        <button onclick="resetDemo()">↩ Day 1</button>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ═══════════════════════════════
+       SCREEN 2: EVENING
+  ═══════════════════════════════ -->
+  <div class="screen" id="screen-evening">
+    <div class="top-nav">
+      <div class="day-pill">
+        <span class="day-dot" style="background:var(--lav)"></span>
+        Day <span id="evening-day-num">1</span> of 100
+      </div>
+      <div class="nav-icon">
+        <svg width="17" height="17" viewBox="0 0 17 17" fill="none">
+          <path d="M8.5 2a6.5 6.5 0 0 0 0 13A6.5 6.5 0 0 1 8.5 2z" stroke="var(--label-2)" stroke-width="1.5" stroke-linejoin="round"/>
+        </svg>
+      </div>
+    </div>
+
+    <div class="header">
+      <div class="header-label">Evening check-in</div>
+      <h1>How did<br>today go?</h1>
+      <p>Check off what you did and reflect on how it felt.</p>
+    </div>
+
+    <div class="content">
+      <div class="section-label">Your intentions</div>
+      <div id="evening-items"></div>
+      <button class="btn-cta" onclick="endDay()">End my day ✓</button>
+    </div>
+  </div>
+
+
+  <!-- ═══════════════════════════════
+       SCREEN 3: COMPLETE
+  ═══════════════════════════════ -->
+  <div class="screen" id="screen-complete">
+    <div class="complete-top">
+      <div class="ring-wrap">
+        <div id="ring-svg"></div>
+        <div class="ring-center">
+          <div class="ring-pct" id="ring-pct">1%</div>
+          <div class="ring-sub">done</div>
+        </div>
+      </div>
+      <div class="complete-day-badge">✓ Day <span id="complete-day-num">1</span> complete</div>
+      <div class="complete-title" id="complete-title">You showed up.</div>
+      <div class="complete-sub" id="complete-sub">That's what matters most.</div>
+    </div>
+
+    <div class="stat-row">
+      <div class="stat-pill">
+        <div class="stat-num" id="stat-done">0</div>
+        <div class="stat-lbl">Done</div>
+      </div>
+      <div class="stat-pill">
+        <div class="stat-num" id="stat-happy">0</div>
+        <div class="stat-lbl">Made me happy</div>
+      </div>
+      <div class="stat-pill">
+        <div class="stat-num" id="stat-streak">1</div>
+        <div class="stat-lbl">Day streak</div>
+      </div>
+    </div>
+
+    <div class="content">
+      <div class="section-label">Today's recap</div>
+      <div id="recap-list"></div>
+      <button class="btn-cta" onclick="startNewDay()">Start Day <span id="complete-next">2</span> →</button>
+      <button class="btn-ghost" onclick="resetDemo()">↩ Restart demo</button>
+    </div>
+  </div>
+
+
+  <!-- ═══════════════════════════════
+       SCREEN 4: WEEKLY SUMMARY
+  ═══════════════════════════════ -->
+  <div class="screen" id="screen-weekly">
+    <div class="top-nav">
+      <div class="day-pill">
+        <span class="day-dot" style="background:var(--lav)"></span>
+        Day <span id="weekly-day-num">7</span> of 100
+      </div>
+      <div class="nav-icon">
+        <svg width="17" height="17" viewBox="0 0 17 17" fill="none">
+          <rect x="2" y="11" width="2.5" height="4.5" rx="1" stroke="var(--label-2)" stroke-width="1.5"/>
+          <rect x="7" y="7.5" width="2.5" height="8" rx="1" stroke="var(--label-2)" stroke-width="1.5"/>
+          <rect x="12" y="3.5" width="2.5" height="12" rx="1" stroke="var(--label-2)" stroke-width="1.5"/>
+        </svg>
+      </div>
+    </div>
+
+    <div class="header">
+      <div class="header-label" id="weekly-label">Week 1 reflection</div>
+      <h1>Here's what this<br>week told you.</h1>
+      <p>Your notes, surfaced back to you.</p>
+    </div>
+
+    <div class="content" id="weekly-content"></div>
+
+    <div class="weekly-footer">
+      <button class="btn-cta" onclick="startNewDay()">Start Day <span id="weekly-next">8</span> →</button>
+      <button class="btn-ghost" onclick="resetDemo()">↩ Back to Day 1</button>
+    </div>
+  </div>
+
+
+  <!-- ═══════════════════════════════
+       SCREEN 5: 10-DAY DASHBOARD
+  ═══════════════════════════════ -->
+  <div class="screen" id="screen-dashboard">
+    <div class="top-nav">
+      <div class="day-pill">
+        <span class="day-dot" style="background:var(--coral)"></span>
+        Day <span id="dash-day-num">10</span> of 100
+      </div>
+      <div class="nav-icon">
+        <svg width="17" height="17" viewBox="0 0 17 17" fill="none">
+          <circle cx="8.5" cy="8.5" r="6" stroke="var(--label-2)" stroke-width="1.5"/>
+          <path d="M8.5 5v3.5l2.5 2" stroke="var(--label-2)" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+      </div>
+    </div>
+
+    <div class="header">
+      <div class="header-label" id="dash-label">10-day check-in</div>
+      <h1>Your happiness<br>patterns.</h1>
+      <p>This is what the data says about you.</p>
+    </div>
+
+    <div class="content" id="dashboard-content"></div>
+
+    <div class="dash-footer">
+      <button class="btn-cta" onclick="startNewDay()">Start Day <span id="dash-next">11</span> →</button>
+      <button class="btn-ghost" onclick="resetDemo()">↩ Back to Day 1</button>
+    </div>
+  </div>
+
+
+  <!-- ═══════════════════════════════
+       iOS TAB BAR
+  ═══════════════════════════════ -->
+  <div class="tab-bar">
+    <button class="tab active">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M3 11.5L12 4l9 7.5V21a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V11.5z"/>
+        <rect x="9" y="13.5" width="6" height="8.5" rx="0.5"/>
+      </svg>
+      <span class="tab-lbl">Today</span>
+    </button>
+    <button class="tab">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke-width="1.7" stroke-linecap="round">
+        <rect x="3" y="15" width="4" height="7" rx="1"/>
+        <rect x="10" y="10.5" width="4" height="11.5" rx="1"/>
+        <rect x="17" y="5" width="4" height="17" rx="1"/>
+      </svg>
+      <span class="tab-lbl">Progress</span>
+    </button>
+    <button class="tab">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 2l2.4 5.2L20 8.2l-4 3.9 1 5.5L12 15l-5 2.6 1-5.5-4-3.9 5.6-.8L12 2z"/>
+      </svg>
+      <span class="tab-lbl">Streak</span>
+    </button>
+    <button class="tab">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke-width="1.7" stroke-linecap="round">
+        <circle cx="12" cy="12" r="9"/>
+        <circle cx="12" cy="9.5" r="2.8"/>
+        <path d="M6.5 19.5c0-3 2.46-5 5.5-5s5.5 2 5.5 5"/>
+      </svg>
+      <span class="tab-lbl">You</span>
+    </button>
+  </div>
+
+</div>
+
+<script>
+  // ═══════════════════════════════════════
+  //  SEEDS + COLORS
+  // ═══════════════════════════════════════
+  const SEEDS = [
+    { text: 'Go for a walk 🚶',         color: 'sage'  },
+    { text: 'Call a friend 📞',          color: 'lav'   },
+    { text: 'Cook something new 🍳',     color: 'yel'   },
+    { text: 'Read for 20 min 📖',        color: 'blue'  },
+    { text: 'Meditate 🧘',               color: 'blue'  },
+    { text: 'Draw or doodle ✏️',         color: 'coral' },
+    { text: 'Watch the sunset 🌅',       color: 'coral' },
+    { text: 'Listen to music I love 🎵', color: 'pink'  },
+    { text: 'Take a long bath 🛁',       color: 'pink'  },
+    { text: 'Journal 📝',                color: 'lav'   },
+    { text: 'Dance 💃',                  color: 'sage'  },
+    { text: 'Nap guilt-free 😴',         color: 'pink'  },
+    { text: 'Garden or tend plants 🌱',  color: 'sage'  },
+    { text: 'Watch a fave movie 🎬',     color: 'coral' },
+    { text: 'Try something new ✨',      color: 'lav'   },
+    { text: 'Move my body 🏃',           color: 'sage'  },
+    { text: 'Sit in the sun ☀️',         color: 'yel'   },
+    { text: 'Bake something 🧁',         color: 'yel'   },
+  ];
+
+  const CHIP_COLORS = ['sage','lav','yel','coral','blue','pink'];
+
+  // ── Category system ──
+  const CATEGORIES = [
+    { key: 'physical',     label: 'Physical Activity',    cls: 'cat-physical',     icon: '🏃' },
+    { key: 'inner',        label: 'Inner Work',           cls: 'cat-inner',        icon: '🧘' },
+    { key: 'intellectual', label: 'Intellectual Pursuit', cls: 'cat-intellectual', icon: '📖' },
+    { key: 'connection',   label: 'Human Connection',     cls: 'cat-connection',   icon: '🤝' },
+    { key: 'rest',         label: 'Deep Rest',            cls: 'cat-rest',         icon: '🛁' },
+    { key: 'discovery',    label: 'New Discovery',        cls: 'cat-discovery',    icon: '✨' },
+    { key: 'creative',     label: 'Creative Expression',  cls: 'cat-creative',     icon: '🎨' },
+    { key: 'selfcare',     label: 'Self Care',            cls: 'cat-selfcare',     icon: '💆' },
+    { key: 'other',        label: 'Other',                cls: 'cat-other',        icon: '•'  },
+  ];
+
+  const CATEGORY_RULES = [
+    { keys: ['walk','run','move','body','exercise','gym','yoga','swim','hike','bike','sport','stretch','dance'], cat: 'physical' },
+    { keys: ['meditat','journal','reflect','breath','mental','mindful','therapy','gratitude','intention'], cat: 'inner' },
+    { keys: ['read','book','learn','study','podcast','course','write','research','class','language','news','documentary'], cat: 'intellectual' },
+    { keys: ['call','friend','family','mom','dad','partner','date','visit','text','catch up','dinner with','coffee with','lunch with'], cat: 'connection' },
+    { keys: ['nap','sleep','bath','rest','relax','slow','unwind','nothing','sit','sunset','sun','candle','quiet'], cat: 'rest' },
+    { keys: ['new','try','explore','discover','first time','never','adventure','travel','museum','exhibit'], cat: 'discovery' },
+    { keys: ['draw','paint','sketch','doodle','music','sing','play','cook','bake','craft','make','create','sew','knit','photo','film','write','dance'], cat: 'creative' },
+    { keys: ['hair','nails','massage','facial','spa','skincare','manicure','pedicure','salon','wax','grooming','care'], cat: 'selfcare' },
+  ];
+
+  function categorize(text) {
+    const lower = text.toLowerCase();
+    for (const rule of CATEGORY_RULES) {
+      if (rule.keys.some(k => lower.includes(k))) return rule.cat;
+    }
+    return 'other';
+  }
+
+  function getCategoryMeta(key) {
+    return CATEGORIES.find(c => c.key === key) || CATEGORIES[CATEGORIES.length - 1];
+  }
+
+  // Vibrant pie chart colors
+  const CAT_HEX = {
+    physical:     '#30D158',
+    inner:        '#BF5AF2',
+    intellectual: '#0A84FF',
+    connection:   '#FFD60A',
+    rest:         '#FF375F',
+    discovery:    '#FF6B51',
+    creative:     '#5856D6',
+    selfcare:     '#FF9F0A',
+    other:        '#8E8E93',
+  };
+
+  function svgDonutPie(slices, size = 220) {
+    const cx = size / 2, cy = size / 2;
+    const outerR = size * 0.41;
+    const innerR = size * 0.26;
+    const total  = slices.reduce((s, d) => s + d.count, 0);
+    if (!total) return '';
+
+    let angle = -Math.PI / 2;
+    const GAP = 0.025;
+
+    const paths = slices.map(d => {
+      const sweep = (d.count / total) * 2 * Math.PI;
+      const start = angle + GAP / 2;
+      const end   = angle + sweep - GAP / 2;
+      angle += sweep;
+
+      const x1  = cx + outerR * Math.cos(start), y1  = cy + outerR * Math.sin(start);
+      const x2  = cx + outerR * Math.cos(end),   y2  = cy + outerR * Math.sin(end);
+      const ix1 = cx + innerR * Math.cos(end),   iy1 = cy + innerR * Math.sin(end);
+      const ix2 = cx + innerR * Math.cos(start), iy2 = cy + innerR * Math.sin(start);
+      const large = sweep - GAP > Math.PI ? 1 : 0;
+
+      const path = [
+        `M ${x1.toFixed(2)} ${y1.toFixed(2)}`,
+        `A ${outerR} ${outerR} 0 ${large} 1 ${x2.toFixed(2)} ${y2.toFixed(2)}`,
+        `L ${ix1.toFixed(2)} ${iy1.toFixed(2)}`,
+        `A ${innerR} ${innerR} 0 ${large} 0 ${ix2.toFixed(2)} ${iy2.toFixed(2)}`,
+        'Z',
+      ].join(' ');
+
+      return `<path d="${path}" fill="${d.color}"/>`;
+    }).join('');
+
+    const centerLabel = total === 1 ? 'activity' : 'activities';
+
+    return `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}">
+      ${paths}
+      <text x="${cx}" y="${cy - 8}" text-anchor="middle" dominant-baseline="middle"
+        font-size="28" font-weight="800" font-family="-apple-system,system-ui,sans-serif"
+        fill="#000000">${total}</text>
+      <text x="${cx}" y="${cy + 14}" text-anchor="middle" dominant-baseline="middle"
+        font-size="10" font-weight="700" font-family="-apple-system,system-ui,sans-serif"
+        fill="rgba(60,60,67,0.48)" letter-spacing="0.08em">${centerLabel.toUpperCase()}</text>
+    </svg>`;
+  }
+
+  function seedColor(text) {
+    const match = SEEDS.find(s => s.text === text);
+    if (match) return match.color;
+    const idx = Math.abs(text.split('').reduce((a,c) => a + c.charCodeAt(0), 0)) % CHIP_COLORS.length;
+    return CHIP_COLORS[idx];
+  }
+
+  // ═══════════════════════════════════════
+  //  STORAGE + STATE
+  // ═══════════════════════════════════════
+  const store = {
+    get: (k, d) => { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch { return d; } },
+    set: (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} },
+  };
+
+  let S = store.get('100dom_v2', {
+    day: 1,
+    slots: ['', '', ''],
+    evening: [
+      { done: null, happy: null, feel: '' },
+      { done: null, happy: null, feel: '' },
+      { done: null, happy: null, feel: '' },
+    ],
+    happyHistory:   [],
+    bannedItems:    [],
+    carryoverItems: [],
+    dailyLog:       [],
+    screen: 'morning',
+  });
+
+  // ═══════════════════════════════════════
+  //  BOOT
+  // ═══════════════════════════════════════
+  function init() {
+    document.getElementById('morning-day-num').textContent = S.day;
+    document.getElementById('evening-day-num').textContent = S.day;
+    S.slots.forEach((v, i) => {
+      const el = document.getElementById('slot-' + (i+1));
+      if (el) el.value = v;
+    });
+    renderChips();
+    showScreen(S.screen);
+  }
+
+  // ═══════════════════════════════════════
+  //  CHIPS
+  // ═══════════════════════════════════════
+  function renderChips() {
+    const wrap = document.getElementById('chips-wrap');
+    const banned   = S.bannedItems.map(s => s.toLowerCase());
+    const happyLow = S.happyHistory.map(h => h.toLowerCase());
+    const carryLow = S.carryoverItems.map(c => c.toLowerCase());
+
+    const pool = [];
+    S.carryoverItems.filter(s => !banned.includes(s.toLowerCase()))
+      .forEach(s => pool.push({ text: s, carryover: true }));
+    S.happyHistory.filter(s => !banned.includes(s.toLowerCase()) && !carryLow.includes(s.toLowerCase()))
+      .forEach(s => pool.push({ text: s, carryover: false }));
+    SEEDS.filter(s => !banned.includes(s.text.toLowerCase()) && !happyLow.includes(s.text.toLowerCase()) && !carryLow.includes(s.text.toLowerCase()))
+      .forEach(s => pool.push({ text: s.text, carryover: false }));
+
+    const used = S.slots.map(s => s.trim().toLowerCase()).filter(Boolean);
+    wrap.innerHTML = '';
+
+    pool.slice(0, 12).forEach(({ text, carryover }) => {
+      const btn = document.createElement('button');
+      const colorClass = carryover ? 'chip-carryover' : 'chip-' + seedColor(text);
+      btn.className = 'chip ' + colorClass + (used.includes(text.toLowerCase()) ? ' used' : '');
+      btn.textContent = text;
+      btn.onclick = () => fillSlot(text);
+      wrap.appendChild(btn);
+    });
+  }
+
+  function fillSlot(text) {
+    for (let i = 1; i <= 3; i++) {
+      const el = document.getElementById('slot-' + i);
+      if (!el.value.trim()) {
+        el.value = text;
+        S.slots[i-1] = text;
+        save(); renderChips();
+        return;
+      }
+    }
+  }
+
+  // ═══════════════════════════════════════
+  //  SCREEN NAV
+  // ═══════════════════════════════════════
+  function showScreen(name) {
+    document.querySelectorAll('.screen').forEach(el => el.classList.remove('active'));
+    document.getElementById('screen-' + name).classList.add('active');
+    window.scrollTo(0, 0);
+    S.screen = name;
+    save();
+  }
+
+  // ═══════════════════════════════════════
+  //  MORNING → EVENING
+  // ═══════════════════════════════════════
+  function startDay() {
+    const slots = [1,2,3].map(i => document.getElementById('slot-'+i).value.trim());
+    if (!slots.some(Boolean)) { alert('Add at least one thing that would make you happy today!'); return; }
+    S.slots = slots;
+    save();
+    goToEvening();
+  }
+
+  function goToEvening() {
+    const slots = [1,2,3].map(i => {
+      const el = document.getElementById('slot-'+i);
+      return el ? el.value.trim() : S.slots[i-1] || '';
+    });
+    S.slots = slots;
+    S.evening = slots.map(() => ({ done: null, happy: null, feel: '' }));
+    document.getElementById('evening-day-num').textContent = S.day;
+    renderEveningItems();
+    showScreen('evening');
+  }
+
+  // ═══════════════════════════════════════
+  //  EVENING ITEMS
+  // ═══════════════════════════════════════
+  function renderEveningItems() {
+    const con = document.getElementById('evening-items');
+    con.innerHTML = '';
+    S.slots.forEach((text, idx) => {
+      if (!text) return;
+      const e = S.evening[idx];
+      const card = document.createElement('div');
+      card.className = 'eve-card';
+      const feelOpen = e.done === true ? 'open' : '';
+
+      card.innerHTML = `
+        <div class="eve-item-name">${esc(text)}</div>
+
+        <div class="toggle-label">Did you do it?</div>
+        <div class="toggle-row">
+          <button class="tgl ${e.done === true  ? 'on-done' : ''}" onclick="setDone(${idx},true)">✓ Done</button>
+          <button class="tgl ${e.done === false ? 'on-skip' : ''}" onclick="setDone(${idx},false)">Skip</button>
+        </div>
+
+        <div class="feel-expand ${feelOpen}" id="feel-expand-${idx}">
+          <div class="toggle-label">Did it make you happy?</div>
+          <div class="toggle-row">
+            <button class="tgl ${e.happy === true  ? 'on-happy' : ''}" onclick="setHappy(${idx},true)">😊 Yes!</button>
+            <button class="tgl ${e.happy === false ? 'on-sad'   : ''}" onclick="setHappy(${idx},false)">😔 Not really</button>
+          </div>
+          <div class="toggle-label">How did it feel?</div>
+          <textarea class="feel-textarea" id="feel-${idx}"
+            placeholder="What came up for you? Even a word or two…"
+            oninput="saveFeel(${idx})">${e.feel}</textarea>
+        </div>
+      `;
+      con.appendChild(card);
+    });
+  }
+
+  function setDone(idx, val) {
+    S.evening[idx].done = val;
+    save(); renderEveningItems();
+  }
+  function setHappy(idx, val) {
+    S.evening[idx].happy = val;
+    save(); renderEveningItems();
+  }
+  function saveFeel(idx) {
+    const el = document.getElementById('feel-' + idx);
+    if (el) { S.evening[idx].feel = el.value; save(); }
+  }
+
+  // ═══════════════════════════════════════
+  //  END DAY
+  // ═══════════════════════════════════════
+  function endDay() {
+    const newCarry = [];
+
+    S.slots.forEach((text, idx) => {
+      if (!text) return;
+      const e = S.evening[idx];
+      if (e.done === true && e.happy === true) {
+        if (!S.happyHistory.includes(text)) S.happyHistory.unshift(text);
+        S.carryoverItems = S.carryoverItems.filter(c => c !== text);
+      } else if (e.done === true && e.happy === false) {
+        if (!S.bannedItems.includes(text)) S.bannedItems.push(text);
+        S.happyHistory   = S.happyHistory.filter(h => h !== text);
+        S.carryoverItems = S.carryoverItems.filter(c => c !== text);
+      } else {
+        if (!S.bannedItems.includes(text)) newCarry.push(text);
+      }
+    });
+    S.carryoverItems = newCarry;
+
+    if (!S.dailyLog) S.dailyLog = [];
+    S.dailyLog.push({
+      day: S.day,
+      entries: S.slots.map((text, idx) => ({
+        text,
+        done:  S.evening[idx].done,
+        happy: S.evening[idx].happy,
+        feel:  S.evening[idx].feel,
+      })).filter(e => e.text),
+    });
+
+    save();
+
+    const d = S.day;
+    if (d % 10 === 0) {
+      renderDashboard(); showScreen('dashboard');
+    } else if (d % 7 === 0) {
+      renderWeekly(); showScreen('weekly');
+    } else {
+      renderComplete(); showScreen('complete');
+    }
+  }
+
+  // ═══════════════════════════════════════
+  //  COMPLETE SCREEN
+  // ═══════════════════════════════════════
+  function renderComplete() {
+    const doneItems  = S.evening.filter((e, i) => S.slots[i] && e.done === true);
+    const happyCount = doneItems.filter(e => e.happy === true).length;
+    const pct = Math.max(1, Math.round((S.day / 100) * 100));
+
+    document.getElementById('ring-svg').innerHTML = svgRing(pct, 140, 12, '#FF6B51', 'rgba(255,107,81,0.15)');
+    document.getElementById('ring-pct').textContent  = pct + '%';
+    document.getElementById('complete-day-num').textContent = S.day;
+    document.getElementById('complete-next').textContent    = S.day + 1;
+    document.getElementById('stat-done').textContent   = doneItems.length;
+    document.getElementById('stat-happy').textContent  = happyCount;
+    document.getElementById('stat-streak').textContent = S.day;
+
+    const titles = ['You showed up.','Another day, another step.','You\'re building something.','Look at you go.'];
+    document.getElementById('complete-title').textContent = titles[Math.min(S.day - 1, titles.length - 1)] || titles[3];
+
+    const subs = ['That\'s what matters most.','Keep going.','It\'s working.'];
+    document.getElementById('complete-sub').textContent = subs[doneItems.length > 1 ? 1 : 0];
+
+    const list = document.getElementById('recap-list');
+    list.innerHTML = '';
+    S.slots.forEach((text, idx) => {
+      if (!text) return;
+      const e    = S.evening[idx];
+      const done = e.done === true;
+      const card = document.createElement('div');
+      card.className = 'recap-card';
+      card.innerHTML = `
+        <div class="recap-icon ${done ? 'done' : 'skip'}">${done ? '✓' : '—'}</div>
+        <div style="flex:1">
+          <div class="recap-name">${esc(text)}</div>
+          ${e.feel ? `<div class="recap-feel">${esc(e.feel)}</div>` : ''}
+          ${done && e.happy === true  ? `<span class="recap-tag tag-happy">♥ Made me happy</span>` : ''}
+          ${!done                     ? `<span class="recap-tag tag-carryover">↩ Carrying over</span>` : ''}
+        </div>`;
+      list.appendChild(card);
+    });
+  }
+
+  // ═══════════════════════════════════════
+  //  WEEKLY SUMMARY
+  // ═══════════════════════════════════════
+  function renderWeekly() {
+    const wk = Math.floor(S.day / 7);
+    document.getElementById('weekly-day-num').textContent = S.day;
+    document.getElementById('weekly-label').textContent   = `Week ${wk} reflection`;
+    document.getElementById('weekly-next').textContent    = S.day + 1;
+
+    const log     = (S.dailyLog || []).slice(-7);
+    const all     = log.flatMap(d => d.entries.map(e => ({ ...e, day: d.day })));
+    const happy   = all.filter(e => e.done && e.happy === true);
+    const unhappy = all.filter(e => e.done && e.happy === false);
+    const skipped = all.filter(e => !e.done);
+    const done    = all.filter(e => e.done);
+    const pct     = done.length ? Math.round((happy.length / done.length) * 100) : 0;
+
+    const con = document.getElementById('weekly-content');
+    con.innerHTML = '';
+
+    const ins = document.createElement('div');
+    ins.className = 'insight-box';
+    ins.innerHTML = `
+      <div class="insight-box-label">This week</div>
+      <div class="insight-box-text">
+        You did <strong>${done.length} things</strong> and
+        <strong>${happy.length} made you happy</strong> — ${pct}% of everything you tried.
+        ${skipped.length ? `You carried <strong>${skipped.length} intention${skipped.length > 1 ? 's' : ''}</strong> forward.` : ''}
+      </div>`;
+    con.appendChild(ins);
+
+    function groupByActivity(entries) {
+      const map = {};
+      entries.forEach(e => {
+        if (!map[e.text]) map[e.text] = [];
+        map[e.text].push(e);
+      });
+      return Object.entries(map)
+        .map(([text, items]) => ({ text, items, count: items.length }))
+        .sort((a, b) => b.count - a.count);
+    }
+
+    function makeGroupCard(group, type) {
+      const card = document.createElement('div');
+      card.className = 'group-card';
+
+      const header = document.createElement('div');
+      header.className = 'group-header';
+      header.innerHTML = `
+        <div class="group-name">${esc(group.text)}</div>
+        <div class="group-count ${type}">${group.count} ${group.count === 1 ? 'time' : 'times'}</div>`;
+      card.appendChild(header);
+
+      const days = document.createElement('div');
+      days.className = 'group-days';
+      group.items.forEach(e => {
+        days.innerHTML += `<span class="day-chip-sm">Day ${e.day}</span>`;
+      });
+      card.appendChild(days);
+
+      const withNotes = group.items.filter(e => e.feel && e.feel.trim());
+      if (withNotes.length) {
+        const notesEl = document.createElement('div');
+        notesEl.className = 'group-notes';
+        withNotes.forEach(e => {
+          notesEl.innerHTML += `
+            <div class="group-note">
+              <div class="group-note-text">${esc(e.feel)}</div>
+              <div class="group-note-day">Day ${e.day}</div>
+            </div>`;
+        });
+        card.appendChild(notesEl);
+      }
+      return card;
+    }
+
+    function groupByCategory(entries) {
+      const catMap = {};
+      entries.forEach(e => {
+        const catKey = categorize(e.text);
+        if (!catMap[catKey]) catMap[catKey] = [];
+        catMap[catKey].push(e);
+      });
+      return CATEGORIES
+        .filter(c => catMap[c.key])
+        .map(c => ({ meta: c, activities: groupByActivity(catMap[c.key]) }));
+    }
+
+    // Happy section
+    const hHead = document.createElement('div');
+    hHead.className = 'section-head';
+    hHead.innerHTML = `<div class="pill-tag pill-happy">✓ What lit you up</div>`;
+    con.appendChild(hHead);
+
+    if (!happy.length) {
+      const n = document.createElement('p');
+      n.className = 'no-notes';
+      n.textContent = 'Nothing marked as happy this week yet.';
+      con.appendChild(n);
+    } else {
+      const happyByCat = groupByCategory(happy);
+
+      const pieSlices = happyByCat.map(({ meta, activities }) => ({
+        key:   meta.key,
+        label: meta.label,
+        icon:  meta.icon,
+        count: activities.reduce((s, g) => s + g.count, 0),
+        color: CAT_HEX[meta.key] || CAT_HEX.other,
+      }));
+      const maxSlice = Math.max(...pieSlices.map(s => s.count));
+
+      const pieWrap = document.createElement('div');
+      pieWrap.className = 'pie-wrap';
+      pieWrap.innerHTML = svgDonutPie(pieSlices);
+
+      const legend = document.createElement('div');
+      legend.className = 'pie-legend';
+      pieSlices.forEach(s => {
+        const row = document.createElement('div');
+        row.className = 'pie-legend-item';
+        const pctBar = Math.round((s.count / maxSlice) * 100);
+        row.innerHTML = `
+          <div class="pie-dot" style="background:${s.color}"></div>
+          <div class="pie-legend-label">${s.icon} ${s.label}</div>
+          <div class="pie-legend-bar-track">
+            <div class="pie-legend-bar-fill" style="width:${pctBar}%;background:${s.color}"></div>
+          </div>
+          <div class="pie-legend-count">${s.count}</div>`;
+        legend.appendChild(row);
+      });
+      pieWrap.appendChild(legend);
+      con.appendChild(pieWrap);
+
+      const showAllWrap = document.createElement('div');
+      showAllWrap.className = 'show-all-wrap';
+      showAllWrap.innerHTML = `<button class="show-all-btn" onclick="showAllCats(this.closest('.weekly-cats'))">Show all</button>`;
+      con.appendChild(showAllWrap);
+
+      const catsWrap = document.createElement('div');
+      catsWrap.className = 'weekly-cats';
+      happyByCat.forEach(({ meta, activities }) => {
+        const totalCount = activities.reduce((s, g) => s + g.count, 0);
+        const section    = document.createElement('div');
+        section.className = 'cat-section';
+
+        const toggle = document.createElement('button');
+        toggle.className = 'cat-toggle';
+        toggle.onclick = function() { toggleCat(this); };
+        toggle.innerHTML = `
+          <span class="cat-pill ${meta.cls}" style="pointer-events:none">${meta.icon} ${meta.label}</span>
+          <div class="cat-toggle-right">
+            <span class="cat-toggle-count">${totalCount}×</span>
+            <svg class="cat-chevron" width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <path d="M4 6l4 4 4-4" stroke="rgba(60,60,67,0.48)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>`;
+        section.appendChild(toggle);
+
+        const content = document.createElement('div');
+        content.className = 'cat-content';
+        const inner = document.createElement('div');
+        inner.className = 'cat-content-inner';
+        activities.forEach(group => inner.appendChild(makeGroupCard(group, 'happy')));
+        content.appendChild(inner);
+        section.appendChild(content);
+
+        catsWrap.appendChild(section);
+      });
+      con.appendChild(catsWrap);
+    }
+
+    // Unhappy section
+    const sHead = document.createElement('div');
+    sHead.className = 'section-head';
+    sHead.style.marginTop = '24px';
+    sHead.innerHTML = `<div class="pill-tag pill-unhappy">— What didn't land</div>`;
+    con.appendChild(sHead);
+
+    if (!unhappy.length) {
+      const n = document.createElement('p');
+      n.className = 'no-notes';
+      n.textContent = 'Nothing marked as unhappy this week.';
+      con.appendChild(n);
+    } else {
+      const unhappyByCat = groupByCategory(unhappy);
+      const sadCatsWrap  = document.createElement('div');
+      sadCatsWrap.className = 'weekly-cats';
+      unhappyByCat.forEach(({ meta, activities }) => {
+        const totalCount = activities.reduce((s, g) => s + g.count, 0);
+        const section    = document.createElement('div');
+        section.className = 'cat-section';
+
+        const toggle = document.createElement('button');
+        toggle.className = 'cat-toggle';
+        toggle.onclick = function() { toggleCat(this); };
+        toggle.innerHTML = `
+          <span class="cat-pill ${meta.cls}" style="pointer-events:none">${meta.icon} ${meta.label}</span>
+          <div class="cat-toggle-right">
+            <span class="cat-toggle-count">${totalCount}×</span>
+            <svg class="cat-chevron" width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <path d="M4 6l4 4 4-4" stroke="rgba(60,60,67,0.48)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>`;
+        section.appendChild(toggle);
+
+        const content = document.createElement('div');
+        content.className = 'cat-content';
+        const inner = document.createElement('div');
+        inner.className = 'cat-content-inner';
+        activities.forEach(group => inner.appendChild(makeGroupCard(group, 'unhappy')));
+        content.appendChild(inner);
+        section.appendChild(content);
+
+        sadCatsWrap.appendChild(section);
+      });
+      con.appendChild(sadCatsWrap);
+    }
+
+    con.style.paddingBottom = '20px';
+  }
+
+  // ═══════════════════════════════════════
+  //  10-DAY DASHBOARD
+  // ═══════════════════════════════════════
+  function renderDashboard() {
+    const period = S.day / 10;
+    document.getElementById('dash-day-num').textContent = S.day;
+    document.getElementById('dash-label').textContent   = `Day ${S.day} · ${period < 2 ? 'First' : 'Next'} 10-day check-in`;
+    document.getElementById('dash-next').textContent    = S.day + 1;
+
+    const log     = (S.dailyLog || []).slice(-10);
+    const all     = log.flatMap(d => d.entries.map(e => ({ ...e, day: d.day })));
+    const happy   = all.filter(e => e.done && e.happy === true);
+    const unhappy = all.filter(e => e.done && e.happy === false);
+    const done    = all.filter(e => e.done);
+
+    const con = document.getElementById('dashboard-content');
+    con.innerHTML = '';
+
+    const row = document.createElement('div');
+    row.className = 'compare-row';
+    row.innerHTML = `
+      <div class="compare-half">
+        <div class="ch-label happy">Made me happy</div>
+        <div class="ch-num happy">${happy.length}</div>
+        <div class="ch-sub">of ${done.length} completed</div>
+      </div>
+      <div class="compare-half">
+        <div class="ch-label sad">Didn't land</div>
+        <div class="ch-num sad">${unhappy.length}</div>
+        <div class="ch-sub">of ${done.length} completed</div>
+      </div>`;
+    con.appendChild(row);
+
+    const happyFreq = freq(happy);
+    if (happyFreq.length) {
+      const bHead = document.createElement('div');
+      bHead.className = 'section-head';
+      bHead.innerHTML = `<div class="pill-tag pill-happy">What made you happy</div>`;
+      con.appendChild(bHead);
+
+      const bw = document.createElement('div');
+      bw.className = 'bubble-wrap';
+      bw.innerHTML = svgBubbles(happyFreq, 320, 200);
+      con.appendChild(bw);
+    }
+
+    const unhappyFreq = freq(unhappy);
+    if (unhappyFreq.length) {
+      const uHead = document.createElement('div');
+      uHead.className = 'section-head';
+      uHead.innerHTML = `<div class="pill-tag pill-unhappy">What didn't land</div>`;
+      con.appendChild(uHead);
+
+      const barsEl = document.createElement('div');
+      barsEl.style.cssText = 'background:var(--card);border-radius:var(--r-xl);padding:16px;box-shadow:var(--sh-sm);margin-bottom:12px';
+      const max = unhappyFreq[0].count;
+      unhappyFreq.slice(0,4).forEach(({ text, count }) => {
+        const pct = Math.round((count/max)*100);
+        const b = document.createElement('div');
+        b.className = 'bar-item';
+        b.innerHTML = `
+          <div class="bar-row"><div class="bar-lbl">${esc(text)}</div><div class="bar-cnt">${count}×</div></div>
+          <div class="bar-track"><div class="bar-fill bar-gray" style="width:${pct}%"></div></div>`;
+        barsEl.appendChild(b);
+      });
+      con.appendChild(barsEl);
+    }
+
+    const hNotes = happy.filter(e => e.feel && e.feel.trim());
+    if (hNotes.length) {
+      const qh = document.createElement('div');
+      qh.className = 'section-head';
+      qh.innerHTML = `<div class="pill-tag pill-insight">What you said when happy</div>`;
+      con.appendChild(qh);
+      hNotes.slice(0,3).forEach(e => {
+        const c = document.createElement('div');
+        c.className = 'q-card happy';
+        c.innerHTML = `<div class="q-name">${esc(e.text)}</div><div class="q-text">${esc(e.feel)}</div><div class="q-day">Day ${e.day}</div>`;
+        con.appendChild(c);
+      });
+    }
+
+    const uNotes = unhappy.filter(e => e.feel && e.feel.trim());
+    if (uNotes.length) {
+      const qu = document.createElement('div');
+      qu.className = 'section-head';
+      qu.innerHTML = `<div class="pill-tag pill-unhappy">What you said when it missed</div>`;
+      con.appendChild(qu);
+      uNotes.slice(0,3).forEach(e => {
+        const c = document.createElement('div');
+        c.className = 'q-card unhappy';
+        c.innerHTML = `<div class="q-name">${esc(e.text)}</div><div class="q-text">${esc(e.feel)}</div><div class="q-day">Day ${e.day}</div>`;
+        con.appendChild(c);
+      });
+    }
+
+    con.style.paddingBottom = '20px';
+  }
+
+  // ═══════════════════════════════════════
+  //  NEW DAY
+  // ═══════════════════════════════════════
+  function startNewDay() {
+    S.day += 1;
+    S.slots   = ['','',''];
+    S.evening = [{done:null,happy:null,feel:''},{done:null,happy:null,feel:''},{done:null,happy:null,feel:''}];
+    S.screen  = 'morning';
+    save();
+    document.getElementById('morning-day-num').textContent = S.day;
+    document.getElementById('evening-day-num').textContent = S.day;
+    ['slot-1','slot-2','slot-3'].forEach(id => { const el = document.getElementById(id); if(el) el.value=''; });
+    renderChips();
+    showScreen('morning');
+  }
+
+  function resetDemo() {
+    localStorage.removeItem('100dom_v2');
+    location.reload();
+  }
+
+  // ═══════════════════════════════════════
+  //  DEMO JUMPS
+  // ═══════════════════════════════════════
+  function demoJumpWeekly() {
+    if (!S.dailyLog) S.dailyLog = [];
+    const happy = [
+      { text:'Go for a walk 🚶',     feel:'Felt so alive out there. Cleared everything.' },
+      { text:'Call a friend 📞',      feel:'Laughed for an hour. Connection is my medicine.' },
+      { text:'Cook something new 🍳', feel:'Proud of myself. Turned out incredible.' },
+      { text:'Read for 20 min 📖',    feel:'Finally felt calm after a chaotic day.' },
+      { text:'Go for a walk 🚶',      feel:'Morning light was everything.' },
+      { text:'Got my nails done 💅',  feel:'Such a small thing but I felt so put together.' },
+      { text:'Draw or doodle ✏️',     feel:'Lost track of time completely. Pure flow.' },
+    ];
+    const unhappy = [
+      { text:'Meditate 🧘',           feel:'Couldn\'t focus. Felt more anxious after.' },
+      { text:'Watch a fave movie 🎬', feel:'Too restless to sit still and enjoy it.' },
+    ];
+    for (let i = 1; i <= 7; i++) {
+      if (S.dailyLog.find(d => d.day === i)) continue;
+      const entries = [];
+      entries.push({ ...happy[i-1], done:true, happy:true });
+      if (i === 3) entries.push({ ...unhappy[0], done:true, happy:false });
+      if (i === 6) entries.push({ ...unhappy[1], done:true, happy:false });
+      if (i === 7) entries.push({ text:'Journal 📝', done:false, happy:null, feel:'' });
+      if (entries.length < 2) entries.push({ text:'Sit in the sun ☀️', done:true, happy:true, feel:'Simple but perfect.' });
+      S.dailyLog.push({ day: i, entries });
+    }
+    S.day = 7; save();
+    renderWeekly(); showScreen('weekly');
+  }
+
+  function demoJumpDashboard() {
+    if (!S.dailyLog) S.dailyLog = [];
+    const items = [
+      { text:'Go for a walk 🚶',     happy:true,  feel:'Always makes me feel alive.' },
+      { text:'Call a friend 📞',      happy:true,  feel:'Connection is everything to me.' },
+      { text:'Cook something new 🍳', happy:true,  feel:'I love creating things with my hands.' },
+      { text:'Read for 20 min 📖',    happy:true,  feel:'Peaceful and completely grounding.' },
+      { text:'Go for a walk 🚶',     happy:true,  feel:'Morning air is just my thing.' },
+      { text:'Dance 💃',             happy:true,  feel:'Pure joy. No thinking. Just feeling.' },
+      { text:'Meditate 🧘',           happy:false, feel:'My brain just won\'t stop spinning.' },
+      { text:'Watch a fave movie 🎬', happy:false, feel:'Too restless to actually enjoy it.' },
+      { text:'Go for a walk 🚶',     happy:true,  feel:'' },
+      { text:'Bake something 🧁',     happy:true,  feel:'The smell alone = instant serotonin.' },
+    ];
+    for (let i = 1; i <= 10; i++) {
+      if (S.dailyLog.find(d => d.day === i)) continue;
+      S.dailyLog.push({ day: i, entries: [{ ...items[i-1], done: true }] });
+    }
+    S.day = 10; save();
+    renderDashboard(); showScreen('dashboard');
+  }
+
+  // ═══════════════════════════════════════
+  //  HELPERS
+  // ═══════════════════════════════════════
+  function save() { store.set('100dom_v2', S); }
+
+  function esc(s) {
+    return (s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  function freq(entries) {
+    const map = {};
+    entries.forEach(e => { const k = e.text.trim(); map[k] = (map[k]||0) + 1; });
+    return Object.entries(map).map(([text,count]) => ({text,count})).sort((a,b) => b.count-a.count);
+  }
+
+  function svgRing(pct, size, stroke, color, bg) {
+    const r = (size - stroke) / 2;
+    const c = 2 * Math.PI * r;
+    const off = c - (pct / 100) * c;
+    return `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}">
+      <circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="${bg}" stroke-width="${stroke}"/>
+      <circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="${color}" stroke-width="${stroke}"
+        stroke-linecap="round" stroke-dasharray="${c.toFixed(2)}" stroke-dashoffset="${off.toFixed(2)}"
+        transform="rotate(-90 ${size/2} ${size/2})" style="transition:stroke-dashoffset 1s ease"/>
+    </svg>`;
+  }
+
+  function svgBubbles(items, w=320, h=200) {
+    const colors   = ['#FF6B51','#BF5AF2','#0A84FF','#30D158','#FF9F0A','#FF375F'];
+    const bgColors = ['#FFD8D0','#EDD6FF','#CBF0FF','#D0FFE1','#FFE9C0','#FFD4DE'];
+    const pos = [
+      {x:160, y:95},
+      {x:72,  y:65},
+      {x:252, y:72},
+      {x:60,  y:155},
+      {x:255, y:155},
+      {x:160, y:170},
+    ];
+    const max = items[0]?.count || 1;
+    const circles = items.slice(0,6).map((item, i) => {
+      const r   = Math.round(22 + (item.count / max) * 44);
+      const p   = pos[i];
+      const lbl = item.text.replace(/[\u{1F000}-\u{1FFFF}]|\p{Emoji_Presentation}/gu, '').trim();
+      const short = lbl.length > 10 ? lbl.substring(0,9) + '…' : lbl;
+      return `
+        <circle cx="${p.x}" cy="${p.y}" r="${r}" fill="${bgColors[i%bgColors.length]}"/>
+        <text x="${p.x}" y="${p.y - 6}" text-anchor="middle" dominant-baseline="middle"
+          font-size="10" font-family="-apple-system,system-ui,sans-serif"
+          fill="${colors[i%colors.length]}" font-weight="700">${esc(short)}</text>
+        <text x="${p.x}" y="${p.y + 9}" text-anchor="middle" dominant-baseline="middle"
+          font-size="11" font-family="-apple-system,system-ui,sans-serif"
+          fill="${colors[i%colors.length]}" font-weight="800">${item.count}×</text>`;
+    });
+    return `<svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}">${circles.join('')}</svg>`;
+  }
+
+  function toggleCat(btn) {
+    const content = btn.nextElementSibling;
+    const isOpen  = content.classList.contains('open');
+    content.classList.toggle('open', !isOpen);
+    btn.classList.toggle('open', !isOpen);
+  }
+
+  function showAllCats(container) {
+    container.querySelectorAll('.cat-content').forEach(el => el.classList.add('open'));
+    container.querySelectorAll('.cat-toggle').forEach(el => el.classList.add('open'));
+    const btn = container.querySelector('.show-all-btn');
+    if (btn) btn.style.display = 'none';
+  }
+
+  [1,2,3].forEach(i => {
+    const el = document.getElementById('slot-'+i);
+    if (el) el.addEventListener('input', function() {
+      S.slots[i-1] = this.value; save(); renderChips();
+    });
+  });
+
+  init();
+</script>
+</body>
+</html>
