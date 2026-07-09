@@ -62,7 +62,7 @@
     * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 
     html, body {
-      height: 100%;
+      min-height: 100%;
       background: #D1D1D6;
       display: flex;
       justify-content: center;
@@ -1033,6 +1033,53 @@
     .weekly-footer, .dash-footer {
       padding: 0 16px 8px;
     }
+
+    /* ═══════════════════════════════════════
+       DAY TRACKER GRID (Progress screen)
+    ═══════════════════════════════════════ */
+    .day-tracker-grid {
+      display: grid;
+      grid-template-columns: repeat(10, 1fr);
+      gap: 6px;
+      margin-bottom: 14px;
+    }
+
+    .day-cell {
+      aspect-ratio: 1;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      font-weight: 700;
+    }
+    .day-cell.happy   { background: var(--mint-bg); color: var(--happy-dk); border: 1.5px solid var(--mint); }
+    .day-cell.unhappy { background: var(--sad-bg);  color: var(--sad-dk);   border: 1.5px solid var(--rose); }
+    .day-cell.mixed   { background: linear-gradient(135deg, var(--mint-bg) 50%, var(--sad-bg) 50%); color: var(--label); border: 1.5px solid var(--separator); }
+    .day-cell.skipped { background: var(--card-2); color: var(--label-3); border: 1.5px dashed var(--separator); }
+    .day-cell.today   { background: var(--card); color: var(--primary); border: 2px solid var(--primary); }
+    .day-cell.future  { background: transparent; color: var(--label-3); border: 1px solid var(--separator); opacity: 0.4; }
+
+    .tracker-legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .tracker-legend-item {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--label-2);
+    }
+    .tracker-legend-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 3px;
+      flex-shrink: 0;
+    }
   </style>
 </head>
 <body>
@@ -1229,17 +1276,49 @@
 
 
   <!-- ═══════════════════════════════
+       SCREEN 6: PROGRESS
+  ═══════════════════════════ -->
+  <div class="screen" id="screen-progress">
+    <div class="top-nav">
+      <div class="day-pill">
+        <span class="day-dot" style="background:var(--sky)"></span>
+        Day <span id="progress-day-num">1</span> of 100
+      </div>
+      <div class="nav-icon">
+        <svg width="17" height="17" viewBox="0 0 17 17" fill="none">
+          <rect x="2" y="10" width="2.5" height="5" rx="1" stroke="var(--label-2)" stroke-width="1.5"/>
+          <rect x="7.25" y="6.5" width="2.5" height="8.5" rx="1" stroke="var(--label-2)" stroke-width="1.5"/>
+          <rect x="12.5" y="3" width="2.5" height="12" rx="1" stroke="var(--label-2)" stroke-width="1.5"/>
+        </svg>
+      </div>
+    </div>
+
+    <div class="header">
+      <div class="header-label">Progress overview</div>
+      <h1>Your journey<br>so far.</h1>
+      <p>Every day you've logged, all in one place.</p>
+    </div>
+
+    <div class="content" id="progress-content"></div>
+
+    <div class="dash-footer">
+      <button class="btn-ghost" onclick="resetDemo()">↩ Restart demo</button>
+    </div>
+  </div>
+
+
+  <!-- ═══════════════════════════════
        iOS TAB BAR
   ═══════════════════════════════ -->
   <div class="tab-bar">
-    <button class="tab active">
+    <button class="tab active" id="tab-today" onclick="goToToday()">
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
         <path d="M3 11.5L12 4l9 7.5V21a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V11.5z"/>
         <rect x="9" y="13.5" width="6" height="8.5" rx="0.5"/>
       </svg>
       <span class="tab-lbl">Today</span>
     </button>
-    <button class="tab">
+    <button class="tab" id="tab-progress" onclick="goToProgress()">
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke-width="1.7" stroke-linecap="round">
         <rect x="3" y="15" width="4" height="7" rx="1"/>
         <rect x="10" y="10.5" width="4" height="11.5" rx="1"/>
@@ -1476,12 +1555,33 @@
   // ═══════════════════════════════════════
   //  SCREEN NAV
   // ═══════════════════════════════════════
+  const CORE_SCREENS = ['morning', 'evening', 'complete', 'weekly', 'dashboard'];
+
   function showScreen(name) {
     document.querySelectorAll('.screen').forEach(el => el.classList.remove('active'));
     document.getElementById('screen-' + name).classList.add('active');
     window.scrollTo(0, 0);
-    S.screen = name;
-    save();
+    if (CORE_SCREENS.includes(name)) {
+      S.screen = name;
+      save();
+      setActiveTab('tab-today');
+    }
+  }
+
+  function setActiveTab(id) {
+    document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.id === id));
+  }
+
+  function goToToday() {
+    showScreen(S.screen);
+  }
+
+  function goToProgress() {
+    renderProgress();
+    document.querySelectorAll('.screen').forEach(el => el.classList.remove('active'));
+    document.getElementById('screen-progress').classList.add('active');
+    window.scrollTo(0, 0);
+    setActiveTab('tab-progress');
   }
 
   // ═══════════════════════════════════════
@@ -1646,6 +1746,133 @@
   }
 
   // ═══════════════════════════════════════
+  //  GROUPING HELPERS (shared: weekly, dashboard, progress)
+  // ═══════════════════════════════════════
+  function groupByActivity(entries) {
+    const map = {};
+    entries.forEach(e => {
+      if (!map[e.text]) map[e.text] = [];
+      map[e.text].push(e);
+    });
+    return Object.entries(map)
+      .map(([text, items]) => ({ text, items, count: items.length }))
+      .sort((a, b) => b.count - a.count);
+  }
+
+  function makeGroupCard(group, type) {
+    const card = document.createElement('div');
+    card.className = 'group-card';
+
+    const header = document.createElement('div');
+    header.className = 'group-header';
+    header.innerHTML = `
+      <div class="group-name">${esc(group.text)}</div>
+      <div class="group-count ${type}">${group.count} ${group.count === 1 ? 'time' : 'times'}</div>`;
+    card.appendChild(header);
+
+    const days = document.createElement('div');
+    days.className = 'group-days';
+    group.items.forEach(e => {
+      days.innerHTML += `<span class="day-chip-sm">Day ${e.day}</span>`;
+    });
+    card.appendChild(days);
+
+    const withNotes = group.items.filter(e => e.feel && e.feel.trim());
+    if (withNotes.length) {
+      const notesEl = document.createElement('div');
+      notesEl.className = 'group-notes';
+      withNotes.forEach(e => {
+        notesEl.innerHTML += `
+          <div class="group-note">
+            <div class="group-note-text">${esc(e.feel)}</div>
+            <div class="group-note-day">Day ${e.day}</div>
+          </div>`;
+      });
+      card.appendChild(notesEl);
+    }
+    return card;
+  }
+
+  function groupByCategory(entries) {
+    const catMap = {};
+    entries.forEach(e => {
+      const catKey = categorize(e.text);
+      if (!catMap[catKey]) catMap[catKey] = [];
+      catMap[catKey].push(e);
+    });
+    return CATEGORIES
+      .filter(c => catMap[c.key])
+      .map(c => ({ meta: c, activities: groupByActivity(catMap[c.key]) }));
+  }
+
+  function renderCategoryPieCard(byCat) {
+    const pieSlices = byCat.map(({ meta, activities }) => ({
+      key:   meta.key,
+      label: meta.label,
+      icon:  meta.icon,
+      count: activities.reduce((s, g) => s + g.count, 0),
+      color: CAT_HEX[meta.key] || CAT_HEX.other,
+    }));
+    const maxSlice = Math.max(...pieSlices.map(s => s.count));
+
+    const pieWrap = document.createElement('div');
+    pieWrap.className = 'pie-wrap';
+    pieWrap.innerHTML = svgDonutPie(pieSlices);
+
+    const legend = document.createElement('div');
+    legend.className = 'pie-legend';
+    pieSlices.forEach(s => {
+      const row = document.createElement('div');
+      row.className = 'pie-legend-item';
+      const pctBar = Math.round((s.count / maxSlice) * 100);
+      row.innerHTML = `
+        <div class="pie-dot" style="background:${s.color}"></div>
+        <div class="pie-legend-label">${s.icon} ${s.label}</div>
+        <div class="pie-legend-bar-track">
+          <div class="pie-legend-bar-fill" style="width:${pctBar}%;background:${s.color}"></div>
+        </div>
+        <div class="pie-legend-count">${s.count}</div>`;
+      legend.appendChild(row);
+    });
+    pieWrap.appendChild(legend);
+    return pieWrap;
+  }
+
+  function renderCatAccordion(entriesByCat, type) {
+    const wrap = document.createElement('div');
+    wrap.className = 'weekly-cats';
+    entriesByCat.forEach(({ meta, activities }) => {
+      const totalCount = activities.reduce((s, g) => s + g.count, 0);
+      const section = document.createElement('div');
+      section.className = 'cat-section';
+
+      const toggle = document.createElement('button');
+      toggle.className = 'cat-toggle';
+      toggle.onclick = function() { toggleCat(this); };
+      toggle.innerHTML = `
+        <span class="cat-pill ${meta.cls}" style="pointer-events:none">${meta.icon} ${meta.label}</span>
+        <div class="cat-toggle-right">
+          <span class="cat-toggle-count">${totalCount}×</span>
+          <svg class="cat-chevron" width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M4 6l4 4 4-4" stroke="rgba(60,60,67,0.48)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>`;
+      section.appendChild(toggle);
+
+      const content = document.createElement('div');
+      content.className = 'cat-content';
+      const inner = document.createElement('div');
+      inner.className = 'cat-content-inner';
+      activities.forEach(group => inner.appendChild(makeGroupCard(group, type)));
+      content.appendChild(inner);
+      section.appendChild(content);
+
+      wrap.appendChild(section);
+    });
+    return wrap;
+  }
+
+  // ═══════════════════════════════════════
   //  WEEKLY SUMMARY
   // ═══════════════════════════════════════
   function renderWeekly() {
@@ -1676,63 +1903,6 @@
       </div>`;
     con.appendChild(ins);
 
-    function groupByActivity(entries) {
-      const map = {};
-      entries.forEach(e => {
-        if (!map[e.text]) map[e.text] = [];
-        map[e.text].push(e);
-      });
-      return Object.entries(map)
-        .map(([text, items]) => ({ text, items, count: items.length }))
-        .sort((a, b) => b.count - a.count);
-    }
-
-    function makeGroupCard(group, type) {
-      const card = document.createElement('div');
-      card.className = 'group-card';
-
-      const header = document.createElement('div');
-      header.className = 'group-header';
-      header.innerHTML = `
-        <div class="group-name">${esc(group.text)}</div>
-        <div class="group-count ${type}">${group.count} ${group.count === 1 ? 'time' : 'times'}</div>`;
-      card.appendChild(header);
-
-      const days = document.createElement('div');
-      days.className = 'group-days';
-      group.items.forEach(e => {
-        days.innerHTML += `<span class="day-chip-sm">Day ${e.day}</span>`;
-      });
-      card.appendChild(days);
-
-      const withNotes = group.items.filter(e => e.feel && e.feel.trim());
-      if (withNotes.length) {
-        const notesEl = document.createElement('div');
-        notesEl.className = 'group-notes';
-        withNotes.forEach(e => {
-          notesEl.innerHTML += `
-            <div class="group-note">
-              <div class="group-note-text">${esc(e.feel)}</div>
-              <div class="group-note-day">Day ${e.day}</div>
-            </div>`;
-        });
-        card.appendChild(notesEl);
-      }
-      return card;
-    }
-
-    function groupByCategory(entries) {
-      const catMap = {};
-      entries.forEach(e => {
-        const catKey = categorize(e.text);
-        if (!catMap[catKey]) catMap[catKey] = [];
-        catMap[catKey].push(e);
-      });
-      return CATEGORIES
-        .filter(c => catMap[c.key])
-        .map(c => ({ meta: c, activities: groupByActivity(catMap[c.key]) }));
-    }
-
     // Happy section
     const hHead = document.createElement('div');
     hHead.className = 'section-head';
@@ -1746,74 +1916,14 @@
       con.appendChild(n);
     } else {
       const happyByCat = groupByCategory(happy);
-
-      const pieSlices = happyByCat.map(({ meta, activities }) => ({
-        key:   meta.key,
-        label: meta.label,
-        icon:  meta.icon,
-        count: activities.reduce((s, g) => s + g.count, 0),
-        color: CAT_HEX[meta.key] || CAT_HEX.other,
-      }));
-      const maxSlice = Math.max(...pieSlices.map(s => s.count));
-
-      const pieWrap = document.createElement('div');
-      pieWrap.className = 'pie-wrap';
-      pieWrap.innerHTML = svgDonutPie(pieSlices);
-
-      const legend = document.createElement('div');
-      legend.className = 'pie-legend';
-      pieSlices.forEach(s => {
-        const row = document.createElement('div');
-        row.className = 'pie-legend-item';
-        const pctBar = Math.round((s.count / maxSlice) * 100);
-        row.innerHTML = `
-          <div class="pie-dot" style="background:${s.color}"></div>
-          <div class="pie-legend-label">${s.icon} ${s.label}</div>
-          <div class="pie-legend-bar-track">
-            <div class="pie-legend-bar-fill" style="width:${pctBar}%;background:${s.color}"></div>
-          </div>
-          <div class="pie-legend-count">${s.count}</div>`;
-        legend.appendChild(row);
-      });
-      pieWrap.appendChild(legend);
-      con.appendChild(pieWrap);
+      con.appendChild(renderCategoryPieCard(happyByCat));
 
       const showAllWrap = document.createElement('div');
       showAllWrap.className = 'show-all-wrap';
       showAllWrap.innerHTML = `<button class="show-all-btn" onclick="showAllCats(this.closest('.weekly-cats'))">Show all</button>`;
       con.appendChild(showAllWrap);
 
-      const catsWrap = document.createElement('div');
-      catsWrap.className = 'weekly-cats';
-      happyByCat.forEach(({ meta, activities }) => {
-        const totalCount = activities.reduce((s, g) => s + g.count, 0);
-        const section    = document.createElement('div');
-        section.className = 'cat-section';
-
-        const toggle = document.createElement('button');
-        toggle.className = 'cat-toggle';
-        toggle.onclick = function() { toggleCat(this); };
-        toggle.innerHTML = `
-          <span class="cat-pill ${meta.cls}" style="pointer-events:none">${meta.icon} ${meta.label}</span>
-          <div class="cat-toggle-right">
-            <span class="cat-toggle-count">${totalCount}×</span>
-            <svg class="cat-chevron" width="16" height="16" viewBox="0 0 16 16" fill="none">
-              <path d="M4 6l4 4 4-4" stroke="rgba(60,60,67,0.48)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </div>`;
-        section.appendChild(toggle);
-
-        const content = document.createElement('div');
-        content.className = 'cat-content';
-        const inner = document.createElement('div');
-        inner.className = 'cat-content-inner';
-        activities.forEach(group => inner.appendChild(makeGroupCard(group, 'happy')));
-        content.appendChild(inner);
-        section.appendChild(content);
-
-        catsWrap.appendChild(section);
-      });
-      con.appendChild(catsWrap);
+      con.appendChild(renderCatAccordion(happyByCat, 'happy'));
     }
 
     // Unhappy section
@@ -1830,37 +1940,7 @@
       con.appendChild(n);
     } else {
       const unhappyByCat = groupByCategory(unhappy);
-      const sadCatsWrap  = document.createElement('div');
-      sadCatsWrap.className = 'weekly-cats';
-      unhappyByCat.forEach(({ meta, activities }) => {
-        const totalCount = activities.reduce((s, g) => s + g.count, 0);
-        const section    = document.createElement('div');
-        section.className = 'cat-section';
-
-        const toggle = document.createElement('button');
-        toggle.className = 'cat-toggle';
-        toggle.onclick = function() { toggleCat(this); };
-        toggle.innerHTML = `
-          <span class="cat-pill ${meta.cls}" style="pointer-events:none">${meta.icon} ${meta.label}</span>
-          <div class="cat-toggle-right">
-            <span class="cat-toggle-count">${totalCount}×</span>
-            <svg class="cat-chevron" width="16" height="16" viewBox="0 0 16 16" fill="none">
-              <path d="M4 6l4 4 4-4" stroke="rgba(60,60,67,0.48)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </div>`;
-        section.appendChild(toggle);
-
-        const content = document.createElement('div');
-        content.className = 'cat-content';
-        const inner = document.createElement('div');
-        inner.className = 'cat-content-inner';
-        activities.forEach(group => inner.appendChild(makeGroupCard(group, 'unhappy')));
-        content.appendChild(inner);
-        section.appendChild(content);
-
-        sadCatsWrap.appendChild(section);
-      });
-      con.appendChild(sadCatsWrap);
+      con.appendChild(renderCatAccordion(unhappyByCat, 'unhappy'));
     }
 
     con.style.paddingBottom = '20px';
@@ -1960,6 +2040,138 @@
         c.innerHTML = `<div class="q-name">${esc(e.text)}</div><div class="q-text">${esc(e.feel)}</div><div class="q-day">Day ${e.day}</div>`;
         con.appendChild(c);
       });
+    }
+
+    con.style.paddingBottom = '20px';
+  }
+
+  // ═══════════════════════════════════════
+  //  PROGRESS (all-time)
+  // ═══════════════════════════════════════
+  function dayStatus(d) {
+    const log = (S.dailyLog || []).find(l => l.day === d);
+    if (!log) return d === S.day ? 'today' : (d < S.day ? 'skipped' : 'future');
+    const doneEntries = (log.entries || []).filter(e => e.done === true);
+    if (!doneEntries.length) return 'skipped';
+    const anyHappy   = doneEntries.some(e => e.happy === true);
+    const anyUnhappy = doneEntries.some(e => e.happy === false);
+    if (anyHappy && anyUnhappy) return 'mixed';
+    if (anyHappy) return 'happy';
+    if (anyUnhappy) return 'unhappy';
+    return 'skipped';
+  }
+
+  function renderProgress() {
+    document.getElementById('progress-day-num').textContent = S.day;
+
+    const log     = S.dailyLog || [];
+    const all     = log.flatMap(d => d.entries.map(e => ({ ...e, day: d.day })));
+    const happy   = all.filter(e => e.done && e.happy === true);
+    const unhappy = all.filter(e => e.done && e.happy === false);
+    const done    = all.filter(e => e.done);
+    const pct     = done.length ? Math.round((happy.length / done.length) * 100) : 0;
+
+    const con = document.getElementById('progress-content');
+    con.innerHTML = '';
+
+    // Stats
+    const row = document.createElement('div');
+    row.className = 'stat-row';
+    row.innerHTML = `
+      <div class="stat-pill">
+        <div class="stat-num">${log.length}</div>
+        <div class="stat-lbl">Days logged</div>
+      </div>
+      <div class="stat-pill">
+        <div class="stat-num">${pct}%</div>
+        <div class="stat-lbl">Happy rate</div>
+      </div>
+      <div class="stat-pill">
+        <div class="stat-num">${S.day}</div>
+        <div class="stat-lbl">Day streak</div>
+      </div>`;
+    con.appendChild(row);
+
+    // Day-by-day tracker
+    const trackHead = document.createElement('div');
+    trackHead.className = 'section-label';
+    trackHead.style.margin = '4px 0 10px';
+    trackHead.textContent = 'Day by day';
+    con.appendChild(trackHead);
+
+    const grid = document.createElement('div');
+    grid.className = 'day-tracker-grid';
+    for (let d = 1; d <= 100; d++) {
+      const status = dayStatus(d);
+      const cell = document.createElement('div');
+      cell.className = 'day-cell ' + status;
+      cell.textContent = d;
+      cell.title = `Day ${d}: ${status}`;
+      grid.appendChild(cell);
+    }
+    con.appendChild(grid);
+
+    const legend = document.createElement('div');
+    legend.className = 'tracker-legend';
+    legend.innerHTML = `
+      <div class="tracker-legend-item"><span class="tracker-legend-dot" style="background:var(--mint-bg);border:1.5px solid var(--mint)"></span>Happy</div>
+      <div class="tracker-legend-item"><span class="tracker-legend-dot" style="background:var(--sad-bg);border:1.5px solid var(--rose)"></span>Unhappy</div>
+      <div class="tracker-legend-item"><span class="tracker-legend-dot" style="background:var(--card-2);border:1.5px dashed var(--separator)"></span>Skipped</div>
+      <div class="tracker-legend-item"><span class="tracker-legend-dot" style="border:1px solid var(--separator);opacity:0.4"></span>Upcoming</div>`;
+    con.appendChild(legend);
+
+    // Overall insight
+    const ins = document.createElement('div');
+    ins.className = 'insight-box';
+    ins.innerHTML = done.length
+      ? `<div class="insight-box-label">Since day 1</div>
+         <div class="insight-box-text">
+           You've logged <strong>${log.length} day${log.length === 1 ? '' : 's'}</strong> and tried
+           <strong>${done.length} thing${done.length === 1 ? '' : 's'}</strong> —
+           <strong>${happy.length} made you happy</strong>, that's ${pct}% overall.
+         </div>`
+      : `<div class="insight-box-label">Since day 1</div>
+         <div class="insight-box-text">Nothing logged yet — end your first day to start seeing patterns here.</div>`;
+    con.appendChild(ins);
+
+    // What's been working
+    const hHead = document.createElement('div');
+    hHead.className = 'section-head';
+    hHead.innerHTML = `<div class="pill-tag pill-happy">✓ What's been working</div>`;
+    con.appendChild(hHead);
+
+    if (!happy.length) {
+      const n = document.createElement('p');
+      n.className = 'no-notes';
+      n.textContent = 'Nothing marked as happy yet.';
+      con.appendChild(n);
+    } else {
+      const happyByCat = groupByCategory(happy);
+      con.appendChild(renderCategoryPieCard(happyByCat));
+
+      const showAllWrap = document.createElement('div');
+      showAllWrap.className = 'show-all-wrap';
+      showAllWrap.innerHTML = `<button class="show-all-btn" onclick="showAllCats(this.closest('.weekly-cats'))">Show all</button>`;
+      con.appendChild(showAllWrap);
+
+      con.appendChild(renderCatAccordion(happyByCat, 'happy'));
+    }
+
+    // What hasn't been working
+    const sHead = document.createElement('div');
+    sHead.className = 'section-head';
+    sHead.style.marginTop = '24px';
+    sHead.innerHTML = `<div class="pill-tag pill-unhappy">— What hasn't been working</div>`;
+    con.appendChild(sHead);
+
+    if (!unhappy.length) {
+      const n = document.createElement('p');
+      n.className = 'no-notes';
+      n.textContent = 'Nothing marked as unhappy yet.';
+      con.appendChild(n);
+    } else {
+      const unhappyByCat = groupByCategory(unhappy);
+      con.appendChild(renderCatAccordion(unhappyByCat, 'unhappy'));
     }
 
     con.style.paddingBottom = '20px';
