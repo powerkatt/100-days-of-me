@@ -86,7 +86,7 @@
       display: none;
       flex-direction: column;
       min-height: 100vh;
-      padding-bottom: 100px;
+      padding-bottom: calc(100px + env(safe-area-inset-bottom));
       animation: fadeUp 0.28s cubic-bezier(.4,0,.2,1);
     }
     .screen.active { display: flex; }
@@ -104,6 +104,7 @@
       align-items: center;
       justify-content: space-between;
       padding: 56px 20px 0;
+      padding-top: max(56px, calc(24px + env(safe-area-inset-top)));
     }
 
     /* Pill chip — day indicator */
@@ -995,6 +996,7 @@
       display: flex;
       align-items: flex-start;
       padding: 10px 0 0;
+      padding-bottom: env(safe-area-inset-bottom);
       z-index: 100;
     }
 
@@ -1157,6 +1159,24 @@
       font-style: italic;
       color: var(--label);
       line-height: 1.65;
+    }
+
+    /* ═══════════════════════════════════════
+       RESPONSIVE (tablet / desktop)
+    ═══════════════════════════════════════ */
+    @media (min-width: 640px)  { .app, .tab-bar { max-width: 480px; } }
+    @media (min-width: 1024px) { .app, .tab-bar { max-width: 560px; } }
+
+    /* Restore hover feedback for mouse/trackpad users (touch relies on :active) */
+    @media (hover: hover) and (pointer: fine) {
+      .btn-cta:hover       { background: var(--primary-dk); }
+      .btn-ghost:hover     { background: var(--card); border-color: var(--label-3); }
+      .chip:hover          { filter: brightness(0.96); }
+      .demo-links button:hover, .nav-icon:hover, .show-all-btn:hover { box-shadow: var(--sh-sm); }
+      .tab:hover .tab-lbl  { color: var(--primary); }
+      .tab:hover svg       { stroke: var(--primary); }
+      .cat-toggle:hover    { background: var(--card-2); }
+      .day-tracker-toggle:hover { opacity: 0.75; }
     }
   </style>
 </head>
