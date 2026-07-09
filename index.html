@@ -1080,6 +1080,68 @@
       border-radius: 3px;
       flex-shrink: 0;
     }
+
+    /* ═══════════════════════════════════════
+       DIARY (Reflection screen)
+    ═══════════════════════════════════════ */
+    .diary-day {
+      background: var(--card);
+      border-radius: var(--r-xl);
+      box-shadow: var(--sh-sm);
+      padding: 16px;
+      margin-bottom: 12px;
+    }
+
+    .diary-day-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .diary-day-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--label);
+    }
+
+    .diary-entry {
+      background: var(--bg);
+      border-radius: var(--r-md);
+      padding: 12px 14px;
+      margin-bottom: 8px;
+    }
+    .diary-entry:last-child { margin-bottom: 0; }
+
+    .diary-entry-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 6px;
+    }
+
+    .diary-entry-name {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--label);
+      line-height: 1.35;
+    }
+
+    .diary-entry-note {
+      font-size: 14px;
+      font-style: italic;
+      color: var(--label);
+      line-height: 1.5;
+    }
+
+    .diary-entry-note.empty {
+      color: var(--label-3);
+      font-style: normal;
+    }
+
+    .tag-unhappy { background: var(--sad-bg); color: var(--sad-dk); }
+    .tag-skip    { background: var(--card-2); color: var(--label-2); border: 1px solid var(--separator); }
   </style>
 </head>
 <body>
@@ -1308,6 +1370,37 @@
 
 
   <!-- ═══════════════════════════════
+       SCREEN 7: REFLECTION
+  ═══════════════════════════ -->
+  <div class="screen" id="screen-reflection">
+    <div class="top-nav">
+      <div class="day-pill">
+        <span class="day-dot" style="background:var(--lav)"></span>
+        Day <span id="reflection-day-num">1</span> of 100
+      </div>
+      <div class="nav-icon">
+        <svg width="17" height="17" viewBox="0 0 17 17" fill="none">
+          <path d="M2.5 3.5c1.8-.9 4-.9 6 0v10c-2-.9-4.2-.9-6 0v-10z" stroke="var(--label-2)" stroke-width="1.5" stroke-linejoin="round"/>
+          <path d="M14.5 3.5c-1.8-.9-4-.9-6 0v10c2-.9 4.2-.9 6 0v-10z" stroke="var(--label-2)" stroke-width="1.5" stroke-linejoin="round"/>
+        </svg>
+      </div>
+    </div>
+
+    <div class="header">
+      <div class="header-label">Reflection</div>
+      <h1>Your diary,<br>day by day.</h1>
+      <p>Every note you've written, all in one place.</p>
+    </div>
+
+    <div class="content" id="reflection-content"></div>
+
+    <div class="dash-footer">
+      <button class="btn-ghost" onclick="resetDemo()">↩ Restart demo</button>
+    </div>
+  </div>
+
+
+  <!-- ═══════════════════════════════
        iOS TAB BAR
   ═══════════════════════════════ -->
   <div class="tab-bar">
@@ -1326,13 +1419,14 @@
       </svg>
       <span class="tab-lbl">Progress</span>
     </button>
-    <button class="tab">
+    <button class="tab" id="tab-reflection" onclick="goToReflection()">
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M12 2l2.4 5.2L20 8.2l-4 3.9 1 5.5L12 15l-5 2.6 1-5.5-4-3.9 5.6-.8L12 2z"/>
+        <path d="M4 5c2.4-1.2 5.4-1.2 8 0v14c-2.6-1.2-5.6-1.2-8 0V5z"/>
+        <path d="M20 5c-2.4-1.2-5.4-1.2-8 0v14c2.6-1.2 5.6-1.2 8 0V5z"/>
       </svg>
-      <span class="tab-lbl">Streak</span>
+      <span class="tab-lbl">Reflection</span>
     </button>
-    <button class="tab">
+    <button class="tab" id="tab-you">
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke-width="1.7" stroke-linecap="round">
         <circle cx="12" cy="12" r="9"/>
         <circle cx="12" cy="9.5" r="2.8"/>
@@ -1576,12 +1670,20 @@
     showScreen(S.screen);
   }
 
-  function goToProgress() {
-    renderProgress();
+  function showPeripheralScreen(screenName, tabId, renderFn) {
+    renderFn();
     document.querySelectorAll('.screen').forEach(el => el.classList.remove('active'));
-    document.getElementById('screen-progress').classList.add('active');
+    document.getElementById('screen-' + screenName).classList.add('active');
     window.scrollTo(0, 0);
-    setActiveTab('tab-progress');
+    setActiveTab(tabId);
+  }
+
+  function goToProgress() {
+    showPeripheralScreen('progress', 'tab-progress', renderProgress);
+  }
+
+  function goToReflection() {
+    showPeripheralScreen('reflection', 'tab-reflection', renderReflection);
   }
 
   // ═══════════════════════════════════════
@@ -2173,6 +2275,64 @@
       const unhappyByCat = groupByCategory(unhappy);
       con.appendChild(renderCatAccordion(unhappyByCat, 'unhappy'));
     }
+
+    con.style.paddingBottom = '20px';
+  }
+
+  // ═══════════════════════════════════════
+  //  REFLECTION (diary)
+  // ═══════════════════════════════════════
+  function renderReflection() {
+    document.getElementById('reflection-day-num').textContent = S.day;
+
+    const con = document.getElementById('reflection-content');
+    con.innerHTML = '';
+
+    const log = (S.dailyLog || []).slice().sort((a, b) => b.day - a.day);
+
+    if (!log.length) {
+      const n = document.createElement('p');
+      n.className = 'no-notes';
+      n.textContent = 'Your diary will fill up as you complete days.';
+      con.appendChild(n);
+      return;
+    }
+
+    log.forEach(dayLog => {
+      const entries = (dayLog.entries || []).filter(e => e.text);
+      if (!entries.length) return;
+
+      const dayCard = document.createElement('div');
+      dayCard.className = 'diary-day';
+
+      const header = document.createElement('div');
+      header.className = 'diary-day-header';
+      header.innerHTML = `
+        <span class="day-chip-sm">Day ${dayLog.day}</span>
+        <span class="diary-day-title">${entries.length} intention${entries.length === 1 ? '' : 's'}</span>`;
+      dayCard.appendChild(header);
+
+      entries.forEach(e => {
+        const entryEl = document.createElement('div');
+        entryEl.className = 'diary-entry';
+        const tag = e.done === true
+          ? (e.happy === true ? '<span class="recap-tag tag-happy">♥ Made me happy</span>'
+             : e.happy === false ? '<span class="recap-tag tag-unhappy">— Didn\'t land</span>'
+             : '')
+          : '<span class="recap-tag tag-skip">↩ Skipped</span>';
+        entryEl.innerHTML = `
+          <div class="diary-entry-head">
+            <div class="diary-entry-name">${esc(e.text)}</div>
+            ${tag}
+          </div>
+          <div class="diary-entry-note ${e.feel && e.feel.trim() ? '' : 'empty'}">
+            ${e.feel && e.feel.trim() ? esc(e.feel) : 'No reflection added.'}
+          </div>`;
+        dayCard.appendChild(entryEl);
+      });
+
+      con.appendChild(dayCard);
+    });
 
     con.style.paddingBottom = '20px';
   }
