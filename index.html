@@ -2282,8 +2282,8 @@
         this.classList.toggle('open', isOpen);
         this.querySelector('span').textContent = isOpen ? 'Show fewer days' : 'Show all 100 days';
       };
-      con.appendChild(toggle);
       con.appendChild(moreGrid);
+      con.appendChild(toggle);
     } else {
       grid.style.marginBottom = '14px';
     }
